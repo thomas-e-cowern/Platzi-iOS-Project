@@ -15,6 +15,8 @@ struct RegistrationView: View {
     @State private var role: String = "customer"
     @State private var avatar: String = "https://avatar.iran.liara.run/public/41"
     
+    @State private var errors: [String] = []
+    
     var body: some View {
         Form {
             TextField("Name", text: $name)
@@ -28,6 +30,23 @@ struct RegistrationView: View {
     
     private func validate() -> [String] {
         
+        if name.checkForEmptyOrWhitespace {
+            errors.append("Please enter a name")
+        }
+        
+        if email.checkForEmptyOrWhitespace {
+            errors.append("Please enter an email")
+        }
+        
+        if !email.isEmail {
+            errors.append("Please enter a valid email")
+        }
+        
+        if !password.isValidPassword {
+            errors.append("Password must be at least 8 characters long")
+        }
+        
+        return errors
     }
 }
 
