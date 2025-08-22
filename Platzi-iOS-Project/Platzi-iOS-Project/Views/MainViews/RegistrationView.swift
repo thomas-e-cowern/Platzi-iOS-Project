@@ -9,14 +9,18 @@ import SwiftUI
 
 struct RegistrationView: View {
     
+    // MARK: - Properties
     @State private var name: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var role: String = "customer"
     @State private var avatar: String = "https://avatar.iran.liara.run/public/41"
     
-    @State private var errors: [String] = []
+    var isValid: Bool {
+        return validate().isEmpty
+    }
     
+    // MARK: - Body
     var body: some View {
         Form {
             TextField("Name", text: $name)
@@ -25,30 +29,39 @@ struct RegistrationView: View {
             Button("Register for Platzi") {
                 
             }
+            .disabled(!isValid)
         }
     }
     
-    private func validate() -> [String] {
+    // MARK: - Methods and functions
+    func validate() -> [String] {
+        
+        var errors: [String] = []
         
         if name.checkForEmptyOrWhitespace {
-            errors.append("Please enter a name")
+            errors.append("Name cannot be empty.")
         }
         
         if email.checkForEmptyOrWhitespace {
-            errors.append("Please enter an email")
+            errors.append("Email cannot be empty.")
         }
         
-        if !email.isEmail {
-            errors.append("Please enter a valid email")
+        if password.checkForEmptyOrWhitespace {
+            errors.append("Password cannot be empty.")
         }
         
         if !password.isValidPassword {
-            errors.append("Password must be at least 8 characters long")
+            errors.append("Password must be at least 8 characters long.")
+        }
+        
+        if !email.isEmail {
+            errors.append("Email must be in correct format.")
         }
         
         return errors
     }
 }
+
 
 #Preview {
     RegistrationView()
