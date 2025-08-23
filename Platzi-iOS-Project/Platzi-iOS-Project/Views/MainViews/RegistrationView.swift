@@ -9,31 +9,40 @@ import SwiftUI
 
 struct RegistrationView: View {
     
+    @State private var registrationForm: RegistrationForm = .init()
+    
+    // MARK: - Body
+    var body: some View {
+        Form {
+            TextField("Name", text: $registrationForm.name)
+            TextField("Email", text: $registrationForm.email)
+            SecureField("Password", text: $registrationForm.password)
+            Button("Register for Platzi") {
+                
+            }
+            .disabled(!registrationForm.isValid)
+        }
+    }
+}
+
+// MARK: - Preview
+#Preview {
+    RegistrationView()
+}
+
+struct RegistrationForm {
+    
     // MARK: - Properties
-    @State private var name: String = ""
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var role: String = "customer"
-    @State private var avatar: String = "https://avatar.iran.liara.run/public/41"
+    @State var name: String = ""
+    @State var email: String = ""
+    @State var password: String = ""
+    @State var role: String = "customer"
+    @State var avatar: String = "https://avatar.iran.liara.run/public/41"
     
     var isValid: Bool {
         return validate().isEmpty
     }
     
-    // MARK: - Body
-    var body: some View {
-        Form {
-            TextField("Name", text: $name)
-            TextField("Email", text: $email)
-            SecureField("Password", text: $password)
-            Button("Register for Platzi") {
-                
-            }
-            .disabled(!isValid)
-        }
-    }
-    
-    // MARK: - Methods and functions
     func validate() -> [String] {
         
         var errors: [String] = []
@@ -60,9 +69,4 @@ struct RegistrationView: View {
         
         return errors
     }
-}
-
-
-#Preview {
-    RegistrationView()
 }
