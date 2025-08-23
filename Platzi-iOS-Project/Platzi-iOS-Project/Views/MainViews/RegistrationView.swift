@@ -13,7 +13,7 @@ struct RegistrationView: View {
     
     @State private var registrationForm = RegistrationForm()
     @State private var errors: [String] = []
-    @State private var responseMessage: String = ""
+    @State private var responseMessage: String?
     
     // MARK: - Body
     var body: some View {
@@ -26,23 +26,35 @@ struct RegistrationView: View {
                 if errors.isEmpty {
                     print("Registering...")
                     Task {
-                        try await register()
+                        await register()
                     }
                 }
             }
-//            .disabled(!registrationForm.isValid)
+            .disabled(!registrationForm.isValid)
+            
             
             if !errors.isEmpty {
-                ValidationSummaryView(errors: errors)
+                ValidationSummaryView(errors: errors, isValidationErrors: true)
+            }
+            
+            if responseMessage != nil {
+                ValidationSummaryView(errors: [], isValidationErrors: false)
             }
         }
     }
     
     // MARK: - Methods and functions
-    func register() async throws {
-        print("In register func in RegistrationView")
-        let registrationResponse = try await authenticatinService.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password)
-        print("👉 RR: \(registrationResponse)")
+    func register() async {
+        do {
+            _ = try await authenticatinService.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password)
+            
+            responseMessage = "registration for \(registrationForm.name) successful"
+            
+            registrationForm = .init()
+        } catch {
+            responseMessage = error.localizedDescription
+        }
+        
     }
 }
 

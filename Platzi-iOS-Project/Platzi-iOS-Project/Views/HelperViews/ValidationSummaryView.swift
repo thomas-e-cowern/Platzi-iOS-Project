@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ValidationSummaryView: View {
     let errors: [String]
+    let isValidationErrors: Bool
 
     var body: some View {
         Group {
@@ -36,7 +37,7 @@ struct ValidationSummaryView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("All set")
                     .font(.headline)
-                Text("No validation issues found.")
+                Text(isValidationErrors ? "No validation issues found." : "Registration Complete")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -120,7 +121,7 @@ struct ValidationSummaryView: View {
 // MARK: - Previews
 
 #Preview("Empty (Success)") {
-    ValidationSummaryView(errors: [])
+    ValidationSummaryView(errors: [], isValidationErrors: true)
         .padding()
 }
 
@@ -130,6 +131,6 @@ struct ValidationSummaryView: View {
         "Reason must be at least 20 characters long.",
         "Date cannot be in the future.",
         "Please choose an icon color."
-    ])
+    ], isValidationErrors: true)
     .padding()
 }
