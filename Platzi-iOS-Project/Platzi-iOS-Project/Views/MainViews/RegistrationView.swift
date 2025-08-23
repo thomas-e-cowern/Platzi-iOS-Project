@@ -17,11 +17,15 @@ struct RegistrationView: View {
         Form {
             TextField("Name", text: $registrationForm.name)
             TextField("Email", text: $registrationForm.email)
-            SecureField("Password", text: $registrationForm.password)
+            SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
             Button("Register for Platzi") {
                 errors = registrationForm.validate()
             }
-            .disabled(!registrationForm.isValid)
+//            .disabled(!registrationForm.isValid)
+            
+            if !errors.isEmpty {
+                ValidationSummaryView(errors: errors)
+            }
         }
     }
 }
