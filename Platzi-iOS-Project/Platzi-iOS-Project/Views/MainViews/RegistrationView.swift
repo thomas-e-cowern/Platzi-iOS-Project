@@ -9,7 +9,8 @@ import SwiftUI
 
 struct RegistrationView: View {
     
-    @State private var registrationForm: RegistrationForm = .init()
+    @State private var registrationForm = RegistrationForm()
+    @State private var errors: [String] = []
     
     // MARK: - Body
     var body: some View {
@@ -18,7 +19,7 @@ struct RegistrationView: View {
             TextField("Email", text: $registrationForm.email)
             SecureField("Password", text: $registrationForm.password)
             Button("Register for Platzi") {
-                
+                errors = registrationForm.validate()
             }
             .disabled(!registrationForm.isValid)
         }
@@ -33,11 +34,11 @@ struct RegistrationView: View {
 struct RegistrationForm {
     
     // MARK: - Properties
-    @State var name: String = ""
-    @State var email: String = ""
-    @State var password: String = ""
-    @State var role: String = "customer"
-    @State var avatar: String = "https://avatar.iran.liara.run/public/41"
+    var name: String = ""
+    var email: String = ""
+    var password: String = ""
+    var role: String = "customer"
+    var avatar: String = "https://avatar.iran.liara.run/public/41"
     
     var isValid: Bool {
         return validate().isEmpty
