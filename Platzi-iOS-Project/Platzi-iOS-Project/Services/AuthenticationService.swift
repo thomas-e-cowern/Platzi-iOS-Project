@@ -11,9 +11,10 @@ struct AuthenticationService {
     let httpClient: HTTPClient
     
     func register(name: String, email: String, password: String, role: String = "customer", avatar: String = "https://avatar.iran.liara.run/public/9") async throws -> RegistrationResponse {
-        
+        print("in register in AuthenticationService")
         let request = RegistrationRequest(name: name, email: email, password: password, role: role, avatar: avatar)
         let registrationResponse = try await httpClient.register(request: request)
+        print("\(registrationResponse)")
         return registrationResponse
     }
 }

@@ -9,8 +9,11 @@ import SwiftUI
 
 struct RegistrationView: View {
     
+    @Environment(\.authenticationService) private var authenticatinService
+    
     @State private var registrationForm = RegistrationForm()
     @State private var errors: [String] = []
+    @State private var responseMessage: String = ""
     
     // MARK: - Body
     var body: some View {
@@ -20,6 +23,12 @@ struct RegistrationView: View {
             SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
             Button("Register for Platzi") {
                 errors = registrationForm.validate()
+                if errors.isEmpty {
+                    print("Registering...")
+                    Task {
+                        try await register()
+                    }
+                }
             }
 //            .disabled(!registrationForm.isValid)
             
@@ -27,6 +36,13 @@ struct RegistrationView: View {
                 ValidationSummaryView(errors: errors)
             }
         }
+    }
+    
+    // MARK: - Methods and functions
+    func register() async throws {
+        print("In register func in RegistrationView")
+        let registrationResponse = try await authenticatinService.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password)
+        print("👉 RR: \(registrationResponse)")
     }
 }
 
