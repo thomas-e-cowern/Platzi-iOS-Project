@@ -29,11 +29,32 @@ struct HTTPClient {
         var request = URLRequest(url: Constants.Urls.login)
         request.httpMethod = "POST"
         request.httpBody = try JSONEncoder().encode(loginRequest)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         print("Login response: \(response)")
+        print("Login data: \(data)")
+        print(String(decoding: data, as: UTF8.self))
         let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
         return loginResponse
     }
 }
+
+//let parameters = "{\r\n\t\"email\": \"john@mail.com\",\r\n\t\"password\": \"changeme\"\r\n}"
+//let postData = parameters.data(using: .utf8)
+//
+//var request = URLRequest(url: URL(string: "https://api.escuelajs.co/api/v1/auth/login")!,timeoutInterval: Double.infinity)
+//request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//request.httpMethod = "POST"
+//request.httpBody = postData
+//
+//let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//  guard let data = data else {
+//    print(String(describing: error))
+//    return
+//  }
+//  print(String(data: data, encoding: .utf8)!)
+//}
+//
+//task.resume()
