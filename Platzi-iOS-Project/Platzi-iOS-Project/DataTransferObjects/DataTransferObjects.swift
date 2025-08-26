@@ -21,3 +21,19 @@ struct RegistrationRequest: Codable {
     let role: String
     let avatar: String
 }
+
+// MARK: - LoginRequest
+struct LoginRequest: Codable {
+    let email, password: String
+}
+
+// MARK: - LoginResponse
+struct LoginResponse: Codable {
+    let accessToken: String
+    let refreshToken: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case refreshToken = "refresh_token"
+    }
+}
