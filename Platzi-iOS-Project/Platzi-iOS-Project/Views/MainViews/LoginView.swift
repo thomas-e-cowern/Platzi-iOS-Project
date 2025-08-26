@@ -30,7 +30,6 @@ struct LoginView: View {
                 Task {
                     await login()
                 }
-                print("isLoggedIn: \(isLoggedIn)")
             } label: {
                 Text("Login")
             }
