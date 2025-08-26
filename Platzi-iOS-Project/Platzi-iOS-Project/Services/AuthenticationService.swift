@@ -26,6 +26,6 @@ struct AuthenticationService {
         // Save the token
         tokenStore.saveTokens(accessToken: loginResponse.accessToken, refreshToken: loginResponse.refreshToken)
         
-        return false
+        return true
     }
 }
