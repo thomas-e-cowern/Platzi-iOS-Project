@@ -9,6 +9,7 @@ import Foundation
 
 struct AuthenticationService {
     let httpClient: HTTPClient
+    let tokenStore: TokenStore
     
     func register(name: String, email: String, password: String, role: String = "customer", avatar: String = "https://avatar.iran.liara.run/public/9") async throws -> RegistrationResponse {
         print("in register in AuthenticationService")
@@ -16,5 +17,14 @@ struct AuthenticationService {
         let registrationResponse = try await httpClient.register(request: request)
         print("\(registrationResponse)")
         return registrationResponse
+    }
+    
+    func login(email: String, password: String) async throws -> Bool {
+        let loginResponse = try await httpClient.login(email: email, password: password)
+        
+        // Save the token
+        tokenStore.saveTokens(accessToken: loginResponse.accessToken, refreshToken: loginResponse.refreshToken)
+        
+        return false
     }
 }
