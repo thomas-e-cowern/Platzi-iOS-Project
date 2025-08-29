@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum HTTPMethod {
+    case get([URLQueryItem])
+    case post(Data?)
+    case delete
+    case put(Data?)
+}
+
 struct HTTPClient {
     func register(request: RegistrationRequest) async throws -> RegistrationResponse {
 
