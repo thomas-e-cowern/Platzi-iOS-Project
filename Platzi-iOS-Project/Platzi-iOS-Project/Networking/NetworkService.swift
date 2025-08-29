@@ -12,6 +12,26 @@ enum HTTPMethod {
     case post(Data?)
     case delete
     case put(Data?)
+    
+    var name: String {
+        switch self {
+        case .get:
+            return "GET"
+        case .post:
+            return "POST"
+        case .delete:
+            return "DELETE"
+        case .put:
+            return "PUT"
+        }
+    }
+}
+
+struct Resource<T: Codable> {
+    let url: URL
+    var method: HTTPMethod = .get([])
+    var headets: [String: String]? = nil
+    var modelType: T.Type
 }
 
 struct HTTPClient {
