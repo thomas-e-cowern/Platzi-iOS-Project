@@ -24,8 +24,12 @@ struct AuthenticationService {
     
     func login(email: String, password: String) async throws -> Bool {
 
-        let loginResponse = try await httpClient.login(email: email, password: password)
-
+        let request = LoginRequest(email: email, password: password)
+        
+        let resource = Resource(url: Constants.Urls.login, method: .post(try request.encode()), modelType: LoginResponse.self)
+        
+        let loginResponse = try await httpClient.load(resource)
+        print("Login Response: \(loginResponse)")
         // Save the token
         tokenStore.saveTokens(accessToken: loginResponse.accessToken, refreshToken: loginResponse.refreshToken)
         
