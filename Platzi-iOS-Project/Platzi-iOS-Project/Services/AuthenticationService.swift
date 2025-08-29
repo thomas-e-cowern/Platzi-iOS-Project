@@ -14,7 +14,10 @@ struct AuthenticationService {
     func register(name: String, email: String, password: String, role: String = "customer", avatar: String = "https://avatar.iran.liara.run/public/9") async throws -> RegistrationResponse {
 
         let request = RegistrationRequest(name: name, email: email, password: password, role: role, avatar: avatar)
-        let registrationResponse = try await httpClient.register(request: request)
+        
+        let resource = Resource(url: Constants.Urls.register, method: .post(try request.encode()), modelType: RegistrationResponse.self)
+        
+        let registrationResponse = try await httpClient.load(resource)
 
         return registrationResponse
     }
