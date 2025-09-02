@@ -119,6 +119,13 @@ struct HTTPClient {
     
     private func refreshToken() async throws {
         let refreshToken =  tokenStore.loadTokens().refreshToken
+        
+        let body = try JSONEncoder().encode(["refreshToken": refreshToken])
+        let resource = Resource(url: Constants.Urls.refresh, method: .post(body), modelType: RefreshResponse.self)
+        
+        let response = try await performRequest(resource)
+
+        tokenStore.saveTokens(accessToken: response.accessToken, refreshToken: response.refreshToken)
     }
 }
 
