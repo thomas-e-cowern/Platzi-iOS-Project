@@ -29,7 +29,7 @@ struct AuthenticationService {
         let resource = Resource(url: Constants.Urls.login, method: .post(try request.encode()), modelType: LoginResponse.self)
         
         let loginResponse = try await httpClient.load(resource)
-        print("Login Response: \(loginResponse)")
+
         // Save the token
         tokenStore.saveTokens(accessToken: loginResponse.accessToken, refreshToken: loginResponse.refreshToken)
         
