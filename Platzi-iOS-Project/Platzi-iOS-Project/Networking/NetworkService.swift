@@ -49,8 +49,14 @@ struct HTTPClient {
     func load<T: Codable>(_ resource: Resource<T>) async throws -> T {
         do {
             return try await performRequest(resource)
-        } catch {
-            throw NetworkError.invalidResponse
+        } catch NetworkError.unauthorized {
+            // Attempt to refresh the token
+            do {
+                try await refreshToken()
+                return try await performRequest(resource)
+            } catch {
+                throw NetworkError.unauthorized
+            }
         }
     }
     
