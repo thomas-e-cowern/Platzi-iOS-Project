@@ -38,6 +38,17 @@ struct LoginResponse: Codable {
     }
 }
 
+// MARK: = RefreshResponse
+struct RefreshResponse: Codable {
+    let accessToken: String
+    let refreshToken: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case refreshToken = "refresh_token"
+    }
+}
+
 // MARK: - ErrorResponse
 struct ErrorResponse: Codable {
     let message: String?
