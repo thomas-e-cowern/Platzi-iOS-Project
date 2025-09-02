@@ -116,5 +116,9 @@ struct HTTPClient {
         }
         
     }
+    
+    private func refreshToken() async throws {
+        let refreshToken =  tokenStore.loadTokens().refreshToken
+    }
 }
 
