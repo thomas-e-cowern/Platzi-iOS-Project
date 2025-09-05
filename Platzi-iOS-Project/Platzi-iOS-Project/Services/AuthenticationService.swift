@@ -38,16 +38,23 @@ struct AuthenticationService {
     
     func checkLoggedInStatus() async -> Bool {
         guard let accessToken = tokenStore.loadTokens().accessToken else {
+            print("No access token")
             return false
         }
         
         // Is accessToken expired?
         if JWT.isExpired(accessToken) {
-            let refreshToken = tokenStore.loadTokens().refreshToken
+            do {
+                print("Refreshing token")
+                try await httpClient.refreshToken()
+                return true
+            } catch {
+                print("Error checking logged in status: \(error.localizedDescription)")
+                return false
+            }
+            
         } else {
-            return false
+            return true
         }
-        
-        return true
     }
 }
