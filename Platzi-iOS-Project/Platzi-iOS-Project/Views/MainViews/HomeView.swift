@@ -8,8 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @Environment(\.authenticationService) private var authenticationService
+    
     var body: some View {
-        Text("This is the Home View")
+        VStack {
+            Text("This is the Home View")
+            
+            Button("Sign out") {
+                authenticationService.signout()
+            }
+        }
+        
+        
     }
 }
 
