@@ -23,6 +23,7 @@ struct Platzi_iOS_ProjectApp: App {
                     }
                     .task {
                         isLoggedIn = await authenticationService.checkLoggedInStatus()
+                        print("isLoggedIn is \(isLoggedIn)")
                         isLoading = false
                     }
                 } else if isLoggedIn {
@@ -30,7 +31,6 @@ struct Platzi_iOS_ProjectApp: App {
                 } else {
                     LoginView()
                 }
-                
             }
         }
     }
