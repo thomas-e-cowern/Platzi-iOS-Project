@@ -9,9 +9,29 @@ import SwiftUI
 
 @main
 struct Platzi_iOS_ProjectApp: App {
+    
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @Environment(\.authenticationService) private var authenticationService
+    @State private var isLoading: Bool = true
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                if isLoading {
+                    ProgressView {
+                        Text("Loading...")
+                    }
+                    .task {
+                        isLoggedIn = await authenticationService.isLoggedIn()
+                        isLoading = false
+                    }
+                } else if isLoggedIn {
+                    HomeView()
+                } else {
+                    LoginView()
+                }
+                
+            }
         }
     }
 }
