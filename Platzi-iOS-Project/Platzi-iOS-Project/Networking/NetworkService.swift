@@ -117,7 +117,7 @@ struct HTTPClient {
         
     }
     
-    private func refreshToken() async throws {
+    func refreshToken() async throws {
         let refreshToken =  tokenStore.loadTokens().refreshToken
         
         let body = try JSONEncoder().encode(["refreshToken": refreshToken])
