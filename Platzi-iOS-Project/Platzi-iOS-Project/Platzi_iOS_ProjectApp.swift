@@ -22,7 +22,7 @@ struct Platzi_iOS_ProjectApp: App {
                         Text("Loading...")
                     }
                     .task {
-                        isLoggedIn = await authenticationService.isLoggedIn()
+                        isLoggedIn = await authenticationService.checkLoggedInStatus()
                         isLoading = false
                     }
                 } else if isLoggedIn {
