@@ -35,4 +35,19 @@ struct AuthenticationService {
         
         return true
     }
+    
+    func checkLoggedInStatus() async -> Bool {
+        guard let accessToken = tokenStore.loadTokens().accessToken else {
+            return false
+        }
+        
+        // Is accessToken expired?
+        if JWT.isExpired(accessToken) {
+            let refreshToken = tokenStore.loadTokens().refreshToken
+        } else {
+            return false
+        }
+        
+        return true
+    }
 }
