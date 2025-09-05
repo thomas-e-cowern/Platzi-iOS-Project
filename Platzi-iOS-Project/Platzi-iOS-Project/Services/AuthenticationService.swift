@@ -36,6 +36,11 @@ struct AuthenticationService {
         return true
     }
     
+    func signout() {
+        UserDefaults.standard.removeObject(forKey: "isLoggedIn")
+        tokenStore.clearTokens()
+    }
+    
     func checkLoggedInStatus() async -> Bool {
         guard let accessToken = tokenStore.loadTokens().accessToken else {
             print("No access token")
