@@ -12,15 +12,22 @@ struct HomeView: View {
     @Environment(\.authenticationService) private var authenticationService
     
     var body: some View {
-        VStack {
-            Text("This is the Home View")
-            
-            Button("Sign out") {
-                authenticationService.signout()
+        TabView {
+            Tab("Category List", systemImage: "person") {
+                NavigationStack {
+                    Text("Category List Screen")
+                }
             }
-        }
-        
-        
+            Tab("Settings", systemImage: "gear") {
+                VStack {
+                    Text("This is the Settings View")
+                    
+                    Button("Sign out") {
+                        authenticationService.signout()
+                    }
+                }
+            }
+        } // MARK: - End of Tab
     }
 }
 
