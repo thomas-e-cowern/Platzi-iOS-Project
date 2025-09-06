@@ -53,3 +53,11 @@ struct RefreshResponse: Codable {
 struct ErrorResponse: Codable {
     let message: String?
 }
+
+// MARK: - Categories
+struct Category: Codable {
+    let id: Int
+    let name: String
+    let slug: String
+    let image: String
+}
