@@ -18,6 +18,11 @@ struct HomeView: View {
                     Text("Category List Screen")
                 }
             }
+            Tab("Location", systemImage: "pin") {
+                NavigationStack {
+                    Text("Location Screen")
+                }
+            }
             Tab("Settings", systemImage: "gear") {
                 VStack {
                     Text("This is the Settings View")
