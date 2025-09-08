@@ -61,3 +61,9 @@ struct Category: Codable, Identifiable {
     let slug: String
     let image: String
 }
+
+
+struct addCategory: Codable {
+    let name: String
+    let image: String
+}
