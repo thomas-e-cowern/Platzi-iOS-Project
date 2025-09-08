@@ -11,6 +11,7 @@ struct CategoryListView: View {
     
     @Environment(PlatziStore.self) private var platziStore
     @State private var isLoading: Bool = false
+    @State private var showAddCategoryView: Bool = false
     
     var body: some View {
         ZStack {
@@ -38,6 +39,13 @@ struct CategoryListView: View {
                         ProgressView("Loading...")
                     }
                 })
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add Category") {
+                    showAddCategoryView.toggle()
+                }
             }
         }
         .task {
