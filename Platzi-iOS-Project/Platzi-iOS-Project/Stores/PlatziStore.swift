@@ -24,4 +24,12 @@ class PlatziStore {
         categories = try await httpClient.load(resource)
     }
     
+    func addCategory(name: String, imageUrl: String) async throws {
+        let addCategoryRequest = AddCategory(name: name, image: imageUrl)
+        let resource = Resource(url: Constants.Urls.addCategory, method: .post(try addCategoryRequest.encode()), modelType: Category.self)
+        let newCategory = try await httpClient.load(resource)
+        print("New Category added: \(newCategory)")
+        categories.append(newCategory)
+    }
+    
 }

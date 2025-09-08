@@ -63,7 +63,7 @@ struct Category: Codable, Identifiable {
 }
 
 
-struct addCategory: Codable {
+struct AddCategory: Codable {
     let name: String
     let image: String
 }
