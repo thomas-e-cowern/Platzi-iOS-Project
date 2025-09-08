@@ -48,6 +48,11 @@ struct CategoryListView: View {
                 }
             }
         }
+        .sheet(isPresented: $showAddCategoryView, content: {
+            NavigationStack {
+                AddCategoryView()
+            }
+        })
         .task {
             await loadCategories()
         }
