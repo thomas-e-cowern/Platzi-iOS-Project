@@ -9,8 +9,13 @@ import SwiftUI
 
 struct AddCategoryView: View {
     
+    @State private var isLoading: Bool = false
     @State private var name: String = ""
     @State private var imageUrl: String = "https://picsum.photos/640/480"
+    
+    private var isFormValid: Bool {
+        !name.checkForEmptyOrWhitespace
+    }
     
     @Environment(PlatziStore.self) private var platziStore
     
@@ -34,6 +39,7 @@ struct AddCategoryView: View {
                         }
                         
                     }
+                    .disabled(!isFormValid || isLoading)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
@@ -41,6 +47,7 @@ struct AddCategoryView: View {
         .navigationTitle("Add Category")
     }
     
+    // MARK: - Methods and functions
     private func addCategory() async {
         do {
             try await platziStore.addCategory(name: name, imageUrl: imageUrl)
@@ -48,6 +55,8 @@ struct AddCategoryView: View {
             print("Error creating category: \(error.localizedDescription)")
         }
     }
+    
+    
 }
 
 #Preview {
