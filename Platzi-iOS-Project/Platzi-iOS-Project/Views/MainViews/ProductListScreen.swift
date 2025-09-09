@@ -29,6 +29,11 @@ struct ProductListScreen: View {
                 }
             }
         }
+        .overlay {
+            if isLoading {
+                ProgressView("Loading...")
+            }
+        }
         .task {
             await getAllProductsByCategory(category.id)
         }
@@ -36,6 +41,11 @@ struct ProductListScreen: View {
     }
     
     func getAllProductsByCategory(_ categoryId: Int) async {
+        
+        defer {
+            isLoading = false
+        }
+        
         do {
             isLoading = true
             products = try await platziStore.loadProductsByCategoryId(categoryId)
