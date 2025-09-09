@@ -68,8 +68,8 @@ struct AddCategory: Codable {
     let image: String
 }
 
-// MARK: - ProductsByCategoryResponse
-struct ProductsByCategoryResponse: Codable {
+// MARK: - Product
+struct Product: Codable {
     let id: Int
     let title, slug: String
     let price: Int
