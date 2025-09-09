@@ -23,18 +23,8 @@ struct ProductListScreen: View {
                 List(products) { product in
                     HStack(spacing: 15) {
                         if let image = product.images.first {
-                            AsyncImage(url: URL(string: image)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                            } placeholder: {
-                                ImagePlaceholderView()
-                            }
-                            .frame(width: 50, height: 50)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                        } 
-
-                        Text(product.title)
+                            RowView(title: product.title, imageUrl: image)
+                        }
                     }
                 }
             }
@@ -58,7 +48,7 @@ struct ProductListScreen: View {
 
 #Preview {
     NavigationStack {
-        ProductListScreen(category: Category(id: 1, name: "Rocks", slug: "rocks", image:" https://picsum.photos/200"))
+        ProductListScreen(category: Category(id: 1, name: "Rocks", slug: "rocks", image: "https://picsum.photos/200"))
             .environment(PlatziStore(httpClient: HTTPClient()))
     }
 }
