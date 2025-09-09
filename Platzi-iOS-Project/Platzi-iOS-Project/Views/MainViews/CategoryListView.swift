@@ -19,20 +19,7 @@ struct CategoryListView: View {
                 ContentUnavailableView("No Categories Available", systemImage: "shippingbox")
             } else {
                 List(platziStore.categories) { category in
-                    HStack(spacing: 15) {
-                        AsyncImage(url: URL(string: category.image)) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                        } placeholder: {
-                            ImagePlaceholderView()
-                        }
-                        .frame(width: 50, height: 50)
-                        
-                        Text(category.name)
-                            .font(.headline)
-                    }
+                    RowView(title: category.name, imageUrl: category.image)
                 }
                 .overlay(alignment: .center, content: {
                     if isLoading {
