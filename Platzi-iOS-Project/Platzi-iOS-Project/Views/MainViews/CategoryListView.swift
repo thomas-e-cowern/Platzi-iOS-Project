@@ -19,7 +19,12 @@ struct CategoryListView: View {
                 ContentUnavailableView("No Categories Available", systemImage: "shippingbox")
             } else {
                 List(platziStore.categories) { category in
-                    RowView(title: category.name, imageUrl: category.image)
+                    NavigationLink {
+                        ProductListScreen(category: category)
+                    } label: {
+                        RowView(title: category.name, imageUrl: category.image)
+                    }
+
                 }
                 .overlay(alignment: .center, content: {
                     if isLoading {
