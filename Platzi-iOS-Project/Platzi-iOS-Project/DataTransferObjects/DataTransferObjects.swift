@@ -69,7 +69,7 @@ struct AddCategory: Codable {
 }
 
 // MARK: - Product
-struct Product: Codable {
+struct Product: Codable, Identifiable {
     let id: Int
     let title, slug: String
     let price: Int
