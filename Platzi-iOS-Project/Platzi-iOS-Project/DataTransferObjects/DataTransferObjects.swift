@@ -62,8 +62,18 @@ struct Category: Codable, Identifiable {
     let image: String
 }
 
-
+// MARK: - AddCategory
 struct AddCategory: Codable {
     let name: String
     let image: String
+}
+
+// MARK: - ProductsByCategoryResponse
+struct ProductsByCategoryResponse: Codable {
+    let id: Int
+    let title, slug: String
+    let price: Int
+    let description: String
+    let category: Category
+    let images: [String]
 }
