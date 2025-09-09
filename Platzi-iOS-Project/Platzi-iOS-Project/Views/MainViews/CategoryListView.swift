@@ -40,6 +40,11 @@ struct CategoryListView: View {
                 AddCategoryView()
             }
         })
+        .overlay {
+            if isLoading {
+                ProgressView("Loading...")
+            }
+        }
         .task {
             await loadCategories()
         }
@@ -52,7 +57,6 @@ struct CategoryListView: View {
         defer { isLoading = false }
         
         do {
-            print("isLoading: \(isLoading)")
             isLoading = true
             try await platziStore.loadCategories()
         } catch {
