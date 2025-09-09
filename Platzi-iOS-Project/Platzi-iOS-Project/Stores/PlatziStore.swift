@@ -32,4 +32,8 @@ class PlatziStore {
         categories.append(newCategory)
     }
     
+    func loadProductsByCategoryId(_ categoryId: Int) async throws -> [Product] {
+        let resource = Resource(url: Constants.Urls.getProductsByCategory(categoryId), modelType: [Product].self)
+        return try await httpClient.load(resource)
+    }
 }
