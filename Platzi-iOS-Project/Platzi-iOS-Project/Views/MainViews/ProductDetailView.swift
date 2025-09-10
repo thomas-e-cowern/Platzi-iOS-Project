@@ -12,10 +12,32 @@ struct ProductDetailView: View {
     var product: Product
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            VStack {
+                
+                ProductDetailImageView(images: product.images)
+                    .padding()
+                
+                HStack {
+                    Text(product.title)
+                        .font(.headline)
+                    Text("\(product.price)")
+                }
+                .padding()
+                
+                Text(product.description)
+                    .font(.body)
+                
+                Spacer()
+            }
+            .padding()
+        }
+        .navigationTitle(product.title)
     }
 }
 
 #Preview {
-    ProductDetailView(product: Product.preview)
+    NavigationStack {
+        ProductDetailView(product: Product.preview)
+    }
 }
