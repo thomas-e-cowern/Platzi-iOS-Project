@@ -33,6 +33,7 @@ struct ProductDetailView: View {
             .padding()
         }
         .navigationTitle(product.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
