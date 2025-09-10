@@ -15,7 +15,7 @@ struct HomeView: View {
         TabView {
             Tab("Category List", systemImage: "person") {
                 NavigationStack {
-                    Text("Category List Screen")
+                    CategoryListView()
                 }
             }
             Tab("Location", systemImage: "pin") {
@@ -38,4 +38,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(PlatziStore(httpClient: HTTPClient()))
 }
