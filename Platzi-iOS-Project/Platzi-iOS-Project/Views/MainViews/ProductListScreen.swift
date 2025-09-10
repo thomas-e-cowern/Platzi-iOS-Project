@@ -23,7 +23,11 @@ struct ProductListScreen: View {
                 List(products) { product in
                     HStack(spacing: 15) {
                         if let image = product.images.first {
-                            RowView(title: product.title, imageUrl: image)
+                            NavigationLink {
+                                ProductDetailView(product: product)
+                            } label: {
+                                RowView(title: product.title, imageUrl: image)
+                            }
                         }
                     }
                 }
