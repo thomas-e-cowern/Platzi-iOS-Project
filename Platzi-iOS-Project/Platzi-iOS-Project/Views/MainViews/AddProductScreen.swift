@@ -15,11 +15,14 @@ struct AddProductScreen: View {
     @State private var title: String = ""
     @State private var price: Double = 0
     @State private var description: String = ""
-    @State private var categoryId: Int = 1
+    @State private var categoryId: Int
     @State private var image: [String] = []
     
-    init(categoryId: Int) {
+    let onSave: (Product) -> Void
+    
+    init(categoryId: Int, onSave: @escaping(Product) -> Void) {
         self.categoryId = categoryId
+        self.onSave = onSave
     }
     
     var body: some View {
@@ -72,7 +75,9 @@ struct AddProductScreen: View {
     func saveProduct() async {
         Task {
             do {
-                let _ = try await platziStore.addProduct(title: title, price: Int(price), description: description, categoryId: categoryId, images: [String.randomImageString])
+                let newProduct = try await platziStore.addProduct(title: title, price: Int(price), description: description, categoryId: categoryId, images: [String.randomImageString])
+                
+                onSave(newProduct)
                 dismiss()
             } catch {
                 print("Error adding Product: \(error.localizedDescription)")
@@ -84,7 +89,7 @@ struct AddProductScreen: View {
 
 #Preview {
     NavigationStack {
-        AddProductScreen(categoryId: 1)
+        AddProductScreen(categoryId: 1, onSave: { _ in })
             .environment(PlatziStore(httpClient: HTTPClient()))
     }
 }

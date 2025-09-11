@@ -14,6 +14,7 @@ struct ProductListScreen: View {
     @Environment(PlatziStore.self) private var platziStore
     @State private var products: [Product] = []
     @State private var isLoading: Bool = false
+    @State private var showAddProductScreen: Bool = false
     
     var body: some View {
         ZStack {
@@ -42,6 +43,24 @@ struct ProductListScreen: View {
             await getAllProductsByCategory(category.id)
         }
         .navigationTitle(category.name)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showAddProductScreen.toggle()
+                } label: {
+                    Text("Add New Product")
+                }
+
+            }
+        }
+        .sheet(isPresented: $showAddProductScreen) {
+            NavigationStack {
+                AddProductScreen(categoryId: category.id) { product in
+                    print("New product: \(product)")
+                    products.append(product)
+                }
+            }
+        }
     }
     
     func getAllProductsByCategory(_ categoryId: Int) async {
