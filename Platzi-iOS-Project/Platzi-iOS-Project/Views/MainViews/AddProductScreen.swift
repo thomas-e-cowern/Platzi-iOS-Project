@@ -15,15 +15,34 @@ struct AddProductScreen: View {
     @State private var title: String = ""
     @State private var price: Double = 0
     @State private var description: String = ""
-    @State private var category: Int = 1
+    @State private var categoryId: Int = 1
     @State private var image: [String] = []
     
+    init(categoryId: Int) {
+        self.categoryId = categoryId
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Form {
+            Picker("Select Category", selection: $categoryId) {
+                ForEach(platziStore.categories) { category in
+                    Text(category.name)
+                        .tag(category.id)
+                }
+            }
+            .pickerStyle(.automatic)
+        }
+        .task {
+            do {
+                try await platziStore.loadCategories()
+            } catch {
+                print("Error in AddProductScreen loadCategories: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
 #Preview {
-    AddProductScreen()
+    AddProductScreen(categoryId: 1)
         .environment(PlatziStore(httpClient: HTTPClient()))
 }
