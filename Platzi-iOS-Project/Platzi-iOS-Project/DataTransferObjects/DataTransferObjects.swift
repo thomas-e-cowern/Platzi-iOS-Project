@@ -78,6 +78,15 @@ struct Product: Codable, Identifiable {
     let images: [String]
 }
 
+// MARK: - AddProduct
+struct AddProduct: Codable {
+    let title: String
+    let price: Int
+    let description: String
+    let categoryId: Int
+    let images: [String]
+}
+
 // MARK: - PreviewProduct
 extension Product {
     static var preview: Product {
