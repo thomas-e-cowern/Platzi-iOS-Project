@@ -22,6 +22,6 @@ extension String {
         return self.range(of: emailRegex, options: .regularExpression, range: nil, locale: nil) != nil
     }
     
-    static let randomImageString = "https://placeimg.com/640/480/any"
+    static let randomImageString = "https://picsum.photos/640/480"
     
 }
