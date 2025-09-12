@@ -18,7 +18,9 @@ struct AuthenticationService {
         let resource = Resource(url: Constants.Urls.register, method: .post(try request.encode()), modelType: RegistrationResponse.self)
         
         let registrationResponse = try await httpClient.load(resource)
-
+        
+        print("Registration response: \(registrationResponse)")
+        
         return registrationResponse
     }
     
@@ -32,6 +34,8 @@ struct AuthenticationService {
 
         // Save the token
         tokenStore.saveTokens(accessToken: loginResponse.accessToken, refreshToken: loginResponse.refreshToken)
+        
+        print("Log in successful!")
         
         return true
     }
