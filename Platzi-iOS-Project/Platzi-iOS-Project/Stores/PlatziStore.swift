@@ -44,7 +44,10 @@ class PlatziStore {
         return newProduct
     }
     
-    func deleteProductById(_ productId: Int) async throws {
-        
+    func deleteProductById(_ productId: Int) async throws -> Bool {
+        let resource = Resource(url: Constants.Urls.deleteProductById(productId), method: .delete, modelType: Bool.self)
+        let deletedProductSuccess = try await httpClient.load(resource)
+        print("Deleted Product: \(deletedProductSuccess)")
+        return deletedProductSuccess
     }
 }
