@@ -21,7 +21,7 @@ struct Constants {
             return URL(string: "https://api.escuelajs.co/api/v1/categories/\(categoryId)/products")!
         }
         
-        static func getProductById(_ productId: Int) -> URL {
+        static func deleteProductById(_ productId: Int) -> URL {
             return URL(string: "https://api.escuelajs.co/api/v1/products/\(productId)")!
         }
     }
