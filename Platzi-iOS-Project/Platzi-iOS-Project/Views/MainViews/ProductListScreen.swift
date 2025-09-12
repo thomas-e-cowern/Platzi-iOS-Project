@@ -21,16 +21,19 @@ struct ProductListScreen: View {
             if products.isEmpty && !isLoading {
                 ContentUnavailableView("No Products Available", systemImage: "shippingbox")
             } else {
-                List(products) { product in
-                    HStack(spacing: 15) {
-                        if let image = product.images.first {
-                            NavigationLink {
-                                ProductDetailView(product: product)
-                            } label: {
-                                RowView(title: product.title, imageUrl: image)
+                List {
+                    ForEach(products) { product in
+                        HStack(spacing: 15) {
+                            if let image = product.images.first {
+                                NavigationLink {
+                                    ProductDetailView(product: product)
+                                } label: {
+                                    RowView(title: product.title, imageUrl: image)
+                                }
                             }
                         }
                     }
+                    .onDelete(perform: deleteProducts)
                 }
             }
         }
@@ -63,6 +66,7 @@ struct ProductListScreen: View {
         }
     }
     
+    // MARK: - Methods and functions
     func getAllProductsByCategory(_ categoryId: Int) async {
         
         defer {
@@ -75,6 +79,18 @@ struct ProductListScreen: View {
             
         } catch {
             print("Error getting products in getAllProductsByCategory: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteProducts(at indexSet: IndexSet) {
+        indexSet.forEach { index in
+            let product = products[index]
+            Task {
+                let isDeleted = try await platziStore.deleteProductById(product.id)
+                if isDeleted {
+                    products.remove(atOffsets: indexSet)
+                }
+            }
         }
     }
 }
