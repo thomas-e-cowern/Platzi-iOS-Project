@@ -38,5 +38,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environment(PlatziStore(httpClient: HTTPClient()))
+        .environment(PlatziStore(httpClient: HTTPClient()   ))
 }
