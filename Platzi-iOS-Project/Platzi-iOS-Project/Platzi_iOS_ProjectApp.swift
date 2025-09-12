@@ -28,6 +28,7 @@ struct Platzi_iOS_ProjectApp: App {
                     }
                 } else if isLoggedIn {
                     HomeView()
+                        .environment(PlatziStore(httpClient: HTTPClient()))
                 } else {
                     LoginView()
                 }
