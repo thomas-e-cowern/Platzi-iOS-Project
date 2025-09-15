@@ -87,6 +87,15 @@ struct AddProduct: Codable {
     let images: [String]
 }
 
+// MARK: - Location
+struct Location: Codable {
+    let id: Int
+    let name: String
+    let description: String
+    let latitude: String
+    let longitude: Double
+}
+
 // MARK: - PreviewProduct
 extension Product {
     static var preview: Product {
