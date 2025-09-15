@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 // MARK: - User
 struct RegistrationResponse: Codable {
@@ -88,12 +89,16 @@ struct AddProduct: Codable {
 }
 
 // MARK: - Location
-struct Location: Codable {
+struct Location: Codable, Identifiable {
     let id: Int
     let name: String
     let description: String
-    let latitude: String
+    let latitude: Double
     let longitude: Double
+    
+    var coordinates: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 }
 
 // MARK: - PreviewProduct
