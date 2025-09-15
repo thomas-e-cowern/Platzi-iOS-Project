@@ -11,9 +11,10 @@ import Observation
 @MainActor
 @Observable
 class PlatziStore {
-    let httpClient: HTTPClient
     
+    let httpClient: HTTPClient
     var categories: [Category] = []
+    var locations: [Location] = []
     
     init(httpClient: HTTPClient) {
         self.httpClient = httpClient
@@ -49,5 +50,11 @@ class PlatziStore {
         let deletedProductSuccess = try await httpClient.load(resource)
         print("Deleted Product: \(deletedProductSuccess)")
         return deletedProductSuccess
+    }
+    
+    func loadLocations() async throws -> [Location] {
+        let resource = Resource(url: Constants.Urls.locations, modelType: [Location].self)
+        locations = try await httpClient.load(resource)
+        return locations
     }
 }
