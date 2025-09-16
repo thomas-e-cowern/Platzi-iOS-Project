@@ -13,6 +13,7 @@ struct LocationView: View {
     @State private var cameraPosition = MapCameraPosition.region(.defaultRegion)
     @Environment(PlatziStore.self) private var platziStore
     @State private var selectedLocation: Location?
+    @State private var showDetailView: Bool = false
     
     var body: some View {
         Map(position: $cameraPosition) {
@@ -30,10 +31,26 @@ struct LocationView: View {
                         .animation(.spring(), value: selectedLocation?.id)
                         .onTapGesture {
                             selectedLocation = location
+                            showDetailView.toggle()
                         }
                 }
             }
         }
+        .sheet(isPresented: $showDetailView, content: {
+            HStack(spacing: 5) {
+                Image("PlatziIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50)
+                    .padding(.trailing, 5)
+                VStack(alignment: .leading) {
+                    Text(selectedLocation?.name ?? "No location selected")
+                        .font(.title)
+                    Text(selectedLocation?.description ?? "No location selected")
+                        .font(.callout)
+                }
+            }
+        })
         .task {
             do {
                 _ = try await platziStore.loadLocations()
