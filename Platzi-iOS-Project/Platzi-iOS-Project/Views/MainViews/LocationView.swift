@@ -35,19 +35,8 @@ struct LocationView: View {
             }
         }
         .sheet(item: $selectedLocation, content: { location in
-            HStack(spacing: 5) {
-                Image("PlatziIcon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50)
-                    .padding(.trailing, 5)
-                VStack(alignment: .leading) {
-                    Text(location.name)
-                        .font(.title)
-                    Text(location.description)
-                        .font(.callout)
-                }
-            }
+            LocationDetailView(location: location)
+                .presentationDetents([.medium])
         })
         .task {
             do {
