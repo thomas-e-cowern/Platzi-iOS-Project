@@ -17,11 +17,17 @@ struct LocationView: View {
     var body: some View {
         Map(position: $cameraPosition) {
             ForEach(platziStore.locations) { location in
+                let isSelected = selectedLocation?.id == location.id
+                let pinColor: Color = isSelected ? .red : .blue
+                let pinFont: Font = isSelected ? .largeTitle : .title
+                let pinScale: CGFloat = isSelected ? 1.5 : 1.0
+
                 Annotation(location.name, coordinate: location.coordinates) {
                     Image(systemName: "mappin.circle.fill")
-                        .foregroundStyle(selectedLocation?.id == location.id ? .red : .blue)
-                        .font(selectedLocation?.id == location.id ? .largeTitle : .title)
-                        .scaleEffect(selectedLocation?.id == location.id ? 1.5 : 1.0)
+                        .foregroundStyle(pinColor)
+                        .font(pinFont)
+                        .scaleEffect(pinScale)
+                        .animation(.spring(), value: selectedLocation?.id)
                         .onTapGesture {
                             selectedLocation = location
                         }
