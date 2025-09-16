@@ -12,14 +12,19 @@ struct LocationView: View {
     
     @State private var cameraPosition = MapCameraPosition.region(.defaultRegion)
     @Environment(PlatziStore.self) private var platziStore
+    @State private var selectedLocation: Location?
     
     var body: some View {
         Map(position: $cameraPosition) {
             ForEach(platziStore.locations) { location in
                 Annotation(location.name, coordinate: location.coordinates) {
                     Image(systemName: "mappin.circle.fill")
-                        .foregroundStyle(Color.red)
-                        .font(.title)
+                        .foregroundStyle(selectedLocation?.id == location.id ? .red : .blue)
+                        .font(selectedLocation?.id == location.id ? .largeTitle : .title)
+                        .scaleEffect(selectedLocation?.id == location.id ? 1.5 : 1.0)
+                        .onTapGesture {
+                            selectedLocation = location
+                        }
                 }
             }
         }
