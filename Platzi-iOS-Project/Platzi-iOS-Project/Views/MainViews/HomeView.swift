@@ -20,7 +20,7 @@ struct HomeView: View {
             }
             Tab("Location", systemImage: "pin") {
                 NavigationStack {
-                    Text("Location Screen")
+                    LocationView()
                 }
             }
             Tab("Settings", systemImage: "gear") {
