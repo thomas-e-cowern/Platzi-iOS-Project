@@ -13,7 +13,6 @@ struct LocationView: View {
     @State private var cameraPosition = MapCameraPosition.region(.defaultRegion)
     @Environment(PlatziStore.self) private var platziStore
     @State private var selectedLocation: Location?
-    @State private var showDetailView: Bool = false
     
     var body: some View {
         Map(position: $cameraPosition) {
@@ -22,7 +21,7 @@ struct LocationView: View {
                 let pinColor: Color = isSelected ? .red : .blue
                 let pinFont: Font = isSelected ? .largeTitle : .title
                 let pinScale: CGFloat = isSelected ? 1.5 : 1.0
-
+                
                 Annotation(location.name, coordinate: location.coordinates) {
                     Image(systemName: "mappin.circle.fill")
                         .foregroundStyle(pinColor)
@@ -31,12 +30,11 @@ struct LocationView: View {
                         .animation(.spring(), value: selectedLocation?.id)
                         .onTapGesture {
                             selectedLocation = location
-                            showDetailView.toggle()
                         }
                 }
             }
         }
-        .sheet(isPresented: $showDetailView, content: {
+        .sheet(item: $selectedLocation, content: { location in
             HStack(spacing: 5) {
                 Image("PlatziIcon")
                     .resizable()
@@ -44,9 +42,9 @@ struct LocationView: View {
                     .frame(width: 50)
                     .padding(.trailing, 5)
                 VStack(alignment: .leading) {
-                    Text(selectedLocation?.name ?? "No location selected")
+                    Text(location.name)
                         .font(.title)
-                    Text(selectedLocation?.description ?? "No location selected")
+                    Text(location.description)
                         .font(.callout)
                 }
             }
