@@ -20,20 +20,22 @@ struct LoginView: View {
     }
     
     var body: some View {
-        Form {
-            Section(header: Text("Login")) {
-                TextField("Email", text: $email)
-                SecureField("Password", text: $password)
-            }
-            
-            Button {
-                Task {
-                    await login()
+        NavigationStack {
+            Form {
+                Section(header: Text("Login")) {
+                    TextField("Email", text: $email)
+                    SecureField("Password", text: $password)
                 }
-            } label: {
-                Text("Login")
+                
+                Button {
+                    Task {
+                        await login()
+                    }
+                } label: {
+                    Text("Login")
+                }
             }
-
+            .navigationTitle("Login")
         }
     }
     
