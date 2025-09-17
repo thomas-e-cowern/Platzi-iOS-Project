@@ -10,6 +10,7 @@ import SwiftUI
 struct RegistrationView: View {
     
     @Environment(\.authenticationService) private var authenticatinService
+    @Environment(\.dismiss) private var dismiss
     
     @State private var registrationForm = RegistrationForm()
     @State private var errors: [String] = []
@@ -17,29 +18,33 @@ struct RegistrationView: View {
     
     // MARK: - Body
     var body: some View {
-        Form {
-            TextField("Name", text: $registrationForm.name)
-            TextField("Email", text: $registrationForm.email)
-            SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
-            Button("Register for Platzi") {
-                errors = registrationForm.validate()
-                if errors.isEmpty {
-                    print("Registering...")
-                    Task {
-                        await register()
+        NavigationStack {
+            Form {
+                TextField("Name", text: $registrationForm.name)
+                TextField("Email", text: $registrationForm.email)
+                SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
+                Button("Register for Platzi") {
+                    errors = registrationForm.validate()
+                    if errors.isEmpty {
+                        print("Registering...")
+                        Task {
+                            await register()
+                            dismiss()
+                        }
                     }
                 }
+                .disabled(!registrationForm.isValid)
+                
+                
+                if !errors.isEmpty {
+                    ValidationSummaryView(errors: errors, isValidationErrors: true)
+                }
+                
+                if responseMessage != nil {
+                    ValidationSummaryView(errors: [], isValidationErrors: false)
+                }
             }
-            .disabled(!registrationForm.isValid)
-            
-            
-            if !errors.isEmpty {
-                ValidationSummaryView(errors: errors, isValidationErrors: true)
-            }
-            
-            if responseMessage != nil {
-                ValidationSummaryView(errors: [], isValidationErrors: false)
-            }
+            .navigationTitle("Register")
         }
     }
     
