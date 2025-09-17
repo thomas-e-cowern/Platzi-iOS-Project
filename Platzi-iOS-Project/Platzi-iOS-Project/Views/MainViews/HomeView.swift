@@ -23,14 +23,8 @@ struct HomeView: View {
                     LocationView()
                 }
             }
-            Tab("Settings", systemImage: "gear") {
-                VStack {
-                    Text("This is the Settings View")
-                    
-                    Button("Sign out") {
-                        authenticationService.signout()
-                    }
-                }
+            Tab("Profile", systemImage: "gear") {
+                ProfileView()
             }
         } // MARK: - End of Tab
     }
