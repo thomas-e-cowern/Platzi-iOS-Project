@@ -12,9 +12,19 @@ struct ProfileView: View {
     @Environment(\.authenticationService) private var authenticationService
     
     var body: some View {
-        Button("Sign out") {
-            authenticationService.signout()
+        Button {
+            // More to come...
+        } label: {
+            Text("Sign Out")
+                .font(.title)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(.red.opacity(0.2)))
+                .foregroundStyle(.red)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         }
+        .padding()
+
     }
 }
 
