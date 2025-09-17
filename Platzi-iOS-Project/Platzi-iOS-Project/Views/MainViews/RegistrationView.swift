@@ -23,7 +23,7 @@ struct RegistrationView: View {
                 TextField("Name", text: $registrationForm.name)
                 TextField("Email", text: $registrationForm.email)
                 SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
-                Button("Register for Platzi") {
+                Button {
                     errors = registrationForm.validate()
                     if errors.isEmpty {
                         print("Registering...")
@@ -32,9 +32,16 @@ struct RegistrationView: View {
                             dismiss()
                         }
                     }
+                } label: {
+                    Text("Register for Platzi")
+                        .font(.title)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(!registrationForm.isValid ? .gray.opacity(0.2) : .green.opacity(0.2))
+                        .foregroundStyle(!registrationForm.isValid ? .gray : .green)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .disabled(!registrationForm.isValid)
-                
                 
                 if !errors.isEmpty {
                     ValidationSummaryView(errors: errors, isValidationErrors: true)
