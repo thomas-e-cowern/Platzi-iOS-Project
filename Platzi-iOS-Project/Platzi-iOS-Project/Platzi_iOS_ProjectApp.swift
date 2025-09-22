@@ -29,6 +29,7 @@ struct Platzi_iOS_ProjectApp: App {
                 } else if isLoggedIn {
                     HomeView()
                         .environment(PlatziStore(httpClient: HTTPClient()))
+                        .environment(CartStore())
                 } else {
                     LoginView()
                 }
