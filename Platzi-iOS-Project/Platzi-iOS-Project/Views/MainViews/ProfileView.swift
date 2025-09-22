@@ -12,21 +12,24 @@ struct ProfileView: View {
     @Environment(\.authenticationService) private var authenticationService
     
     var body: some View {
-        ZStack {
-            
-            Button {
-                authenticationService.signout()
-            } label: {
-                Text("Sign Out")
-                    .font(.title)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(.red.opacity(0.2)))
-                    .foregroundStyle(.red)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+        NavigationStack {
+            ZStack {
+                
+                Button {
+                    authenticationService.signout()
+                } label: {
+                    Text("Sign Out")
+                        .font(.title)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.red.opacity(0.2)))
+                        .foregroundStyle(.red)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+                .padding()
+                
             }
-            .padding()
-            
+            .navigationTitle("Profile")
         }
     }
 }
