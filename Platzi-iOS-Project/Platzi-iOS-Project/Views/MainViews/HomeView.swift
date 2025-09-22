@@ -26,6 +26,9 @@ struct HomeView: View {
             Tab("Profile", systemImage: "gear") {
                 ProfileView()
             }
+            Tab("Cart", systemImage: "cart") {
+                CartView()
+            }
         } // MARK: - End of Tab
     }
 }
@@ -33,4 +36,5 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .environment(PlatziStore(httpClient: HTTPClient()))
+        .environment(CartStore())
 }
