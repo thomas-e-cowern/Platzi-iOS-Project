@@ -10,6 +10,14 @@ import SwiftUI
 struct CartView: View {
     @Environment(CartStore.self) private var cartStore
     @State private var showCheckoutView: Bool = false
+//    @State private var isCheckoutDisabled: Bool = false
+    
+    var isCheckoutDisabled: Bool {
+        if cartStore.total == 0 {
+            return true
+        }
+        return false
+    }
     
     var body: some View {
         NavigationStack {
@@ -39,6 +47,7 @@ struct CartView: View {
                     Text("Complete Checkout")
                 }
                 .buttonStyle(.bordered)
+                .disabled(isCheckoutDisabled)
             }
             .navigationTitle("Shopping Cart")
             .sheet(isPresented: $showCheckoutView) {
