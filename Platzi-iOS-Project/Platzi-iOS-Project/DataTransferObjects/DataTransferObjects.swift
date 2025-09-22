@@ -56,7 +56,7 @@ struct ErrorResponse: Codable {
 }
 
 // MARK: - Categories
-struct Category: Codable, Identifiable {
+struct Category: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
     let slug: String
@@ -70,7 +70,7 @@ struct AddCategory: Codable {
 }
 
 // MARK: - Product
-struct Product: Codable, Identifiable {
+struct Product: Codable, Identifiable, Equatable {
     let id: Int
     let title, slug: String
     let price: Int
