@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProductDetailView: View {
     
+    @Environment(CartStore.self) private var cartStore
+    
     var product: Product
     
     var body: some View {
@@ -29,6 +31,16 @@ struct ProductDetailView: View {
                     .font(.body)
                 
                 Spacer()
+                
+                Button {
+                    cartStore.addProduct(product)
+                    print("Cart: \(cartStore.cartProducts)")
+                    print("Total: \(cartStore.total)")
+                } label: {
+                    Text("Add to Cart")
+                }
+                .buttonStyle(.bordered)
+
             }
             .padding()
         }
@@ -40,5 +52,6 @@ struct ProductDetailView: View {
 #Preview {
     NavigationStack {
         ProductDetailView(product: Product.preview)
+            .environment(CartStore())
     }
 }
