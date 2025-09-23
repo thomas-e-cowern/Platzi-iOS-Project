@@ -10,7 +10,7 @@ import SwiftUI
 struct CartView: View {
     @Environment(CartStore.self) private var cartStore
     @State private var showCheckoutView: Bool = false
-//    @State private var isCheckoutDisabled: Bool = false
+    @State private var showCartInfoView: Bool = false
     
     var isCheckoutDisabled: Bool {
         if cartStore.total == 0 {
@@ -42,7 +42,7 @@ struct CartView: View {
                     .padding()
                 Spacer()
                 Button {
-                    showCheckoutView.toggle()
+                    showCartInfoView.toggle()
                 } label: {
                     Text("Complete Checkout")
                 }
@@ -50,29 +50,8 @@ struct CartView: View {
                 .disabled(isCheckoutDisabled)
             }
             .navigationTitle("Shopping Cart")
-            .sheet(isPresented: $showCheckoutView) {
-                VStack {
-                    ZStack {
-                        Circle()
-                            .frame(width: 40)
-                            .foregroundStyle(.gray)
-                        Image(systemName: "checkmark.circle")
-                            .font(.largeTitle)
-                            .bold()
-                            .foregroundStyle(.green)
-                    }
-                    .padding(.bottom, 10)
-                    
-                    Text("Congratulations! You have successfully completed your checkout!")
-                        .font(.largeTitle)
-                    
-                    Spacer()
-                        .frame(height: 50)
-                    
-                    Text("If this had been a real app, you would receive an email with a link to download your receipt.")
-                        .font(.title)
-                        .padding()
-                }
+            .sheet(isPresented: $showCartInfoView) {
+                CartInfoView()
                 .padding()
             }
         }
