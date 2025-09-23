@@ -27,7 +27,7 @@ struct CartInfoView: View {
 
     // MARK: - Card
     @State private var cardHolder = "First Last"
-    @State private var cardNumber = "1234567812345678"
+    @State private var cardNumber = "4242424242424242"
     @State private var expMonth = "01"
     @State private var expYear = "1977"
     @State private var cvv = "1234"
@@ -179,7 +179,7 @@ struct CartInfoView: View {
         }
 
         // ✅ At this point, you’d tokenize/send to your payment processor.
-        show("Looks good! In a real app, this is where you’d call your payment SDK.")
+        show("Looks good! In a real app, this is where your oreder would be place.....")
     }
 
     private func required(_ fields: String...) -> Bool {
