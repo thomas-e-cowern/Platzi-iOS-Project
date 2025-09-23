@@ -35,6 +35,8 @@ struct CartInfoView: View {
     // MARK: - UI
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -128,7 +130,11 @@ struct CartInfoView: View {
             }
             .navigationTitle("Checkout")
             .alert("Check your info", isPresented: $showAlert) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) {
+                    if alertMessage == "Looks good! In a real app, this is where your order would be placed....." {
+                        dismiss()
+                    }
+                }
             } message: {
                 Text(alertMessage)
             }
@@ -179,7 +185,7 @@ struct CartInfoView: View {
         }
 
         // ✅ At this point, you’d tokenize/send to your payment processor.
-        show("Looks good! In a real app, this is where your oreder would be place.....")
+        show("Looks good! In a real app, this is where your order would be placed.....")
     }
 
     private func required(_ fields: String...) -> Bool {
