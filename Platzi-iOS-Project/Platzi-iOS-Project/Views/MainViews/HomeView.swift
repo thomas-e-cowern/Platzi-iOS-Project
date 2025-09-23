@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @Environment(\.authenticationService) private var authenticationService
+    @Environment(CartStore.self) private var cartStore
     
     var body: some View {
         TabView {
@@ -29,6 +30,7 @@ struct HomeView: View {
             Tab("Cart", systemImage: "cart") {
                 CartView()
             }
+            .badge(cartStore.cartProducts.count)
         } // MARK: - End of Tab
     }
 }
