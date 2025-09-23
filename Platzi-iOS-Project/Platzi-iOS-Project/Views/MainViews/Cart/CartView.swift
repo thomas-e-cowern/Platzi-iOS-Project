@@ -50,7 +50,9 @@ struct CartView: View {
                 .disabled(isCheckoutDisabled)
             }
             .navigationTitle("Shopping Cart")
-            .sheet(isPresented: $showCartInfoView) {
+            .sheet(isPresented: $showCartInfoView, onDismiss: {
+                cartStore.cartProducts = []
+            }) {
                 CartInfoView()
                 .padding()
             }
