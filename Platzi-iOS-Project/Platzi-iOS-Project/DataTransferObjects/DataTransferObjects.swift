@@ -77,6 +77,8 @@ struct Product: Codable, Identifiable, Equatable {
     let description: String
     let category: Category
     let images: [String]
+    
+//    var quantityOrdered: Int = 1
 }
 
 // MARK: - AddProduct
@@ -105,12 +107,12 @@ struct Location: Codable, Identifiable {
 extension Product {
     static var preview: Product {
         Product(id: 86, title: "Classic Red Pullover Hoodie", slug: "classic-red-pullover-hoodie", price: 10, description: "Elevate your casual wardrobe with our Classic Red Pullover Hoodie. Crafted with a soft cotton blend for ultimate comfort, this vibrant red hoodie features a kangaroo pocket, adjustable drawstring hood, and ribbed cuffs for a snug fit. The timeless design ensures easy pairing with jeans or joggers for a relaxed yet stylish look, making it a versatile addition to your everyday attire.", category: Category(id: 31, name: "Clothes", slug: "clothes", image: "https://i.imgur.com/QkIa5tT.jpeg"),
-            images:
-            [
-            "https://i.imgur.com/1twoaDy.jpeg",
-            "https://i.imgur.com/FDwQgLy.jpeg",
-            "https://i.imgur.com/kg1ZhhH.jpeg"
-            ]
+                images:
+                    [
+                        "https://i.imgur.com/1twoaDy.jpeg",
+                        "https://i.imgur.com/FDwQgLy.jpeg",
+                        "https://i.imgur.com/kg1ZhhH.jpeg"
+                    ]
         )
     }
 }
