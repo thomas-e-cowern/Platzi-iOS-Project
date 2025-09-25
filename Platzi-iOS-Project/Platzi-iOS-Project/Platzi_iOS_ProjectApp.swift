@@ -13,6 +13,7 @@ struct Platzi_iOS_ProjectApp: App {
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @Environment(\.authenticationService) private var authenticationService
     @State private var isLoading: Bool = true
+    @State private var cartStore = CartStore()
     
     var body: some Scene {
         WindowGroup {
@@ -29,7 +30,7 @@ struct Platzi_iOS_ProjectApp: App {
                 } else if isLoggedIn {
                     HomeView()
                         .environment(PlatziStore(httpClient: HTTPClient()))
-                        .environment(CartStore())
+                        .environment(cartStore)
                 } else {
                     LoginView()
                 }
