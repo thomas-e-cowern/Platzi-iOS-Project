@@ -33,7 +33,7 @@ struct ProductDetailView: View {
                 Spacer()
                 
                 Button {
-                    cartStore.addProduct(product)
+                    cartStore.add(product)
                     print("Cart: \(cartStore.cartProducts)")
                     print("Total: \(cartStore.total)")
                 } label: {
