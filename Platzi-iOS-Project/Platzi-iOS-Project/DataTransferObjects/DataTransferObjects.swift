@@ -78,7 +78,13 @@ struct Product: Codable, Identifiable, Equatable {
     let category: Category
     let images: [String]
     
-//    var quantityOrdered: Int = 1
+    // Local-only, dynamic cart quantity
+    var quantityOrdered: Int = 1
+    
+    // ✅ Exclude quantityOrdered so Codable ignores it
+    private enum CodingKeys: String, CodingKey {
+        case id, title, slug, price, description, category, images
+    }
 }
 
 // MARK: - AddProduct
