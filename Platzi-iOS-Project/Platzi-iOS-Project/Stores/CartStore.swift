@@ -10,12 +10,17 @@ import SwiftUI
 
 @Observable
 class CartStore {
+    
+    init() { print("CartStore init") }
+    deinit { print("CartStore deinit") }
+    
+    
     var cartProducts: [Product] = []
-
+    
     var total: Int {
         cartProducts.reduce(0) { $0 + ($1.price * $1.quantityOrdered) }
     }
-
+    
     // Add to cart; if already present, bump quantity
     func add(_ product: Product, quantity: Int = 1) {
         if let idx = cartProducts.firstIndex(where: { $0.id == product.id }) {
@@ -26,12 +31,12 @@ class CartStore {
             cartProducts.append(p)
         }
     }
-
+    
     func increment(_ product: Product) {
         guard let idx = cartProducts.firstIndex(where: { $0.id == product.id }) else { return }
         cartProducts[idx].quantityOrdered += 1
     }
-
+    
     func decrement(_ product: Product) {
         guard let idx = cartProducts.firstIndex(where: { $0.id == product.id }) else { return }
         if cartProducts[idx].quantityOrdered > 1 {
@@ -41,7 +46,7 @@ class CartStore {
             cartProducts.remove(at: idx)
         }
     }
-
+    
     func removeProduct(_ product: Product) {
         cartProducts.removeAll { $0.id == product.id }
     }
@@ -51,22 +56,22 @@ class CartStore {
 //@Observable
 //class CartStore {
 //    var cartProducts: [Product] = []
-//    
+//
 //    func addProduct(_ product: Product) {
 //        cartProducts.append(product)
 //        // You might want to handle quantity updates if the same product is added multiple times
 //    }
-//    
+//
 //    func removeProduct(_ product: Product) {
 //        if let index = cartProducts.firstIndex(of: product) {
 //            cartProducts.remove(at: index)
 //        }
 //    }
-//    
+//
 //    var total: Int {
 //        cartProducts.reduce(0) { $0 + $1.price }
 //    }
-//    
+//
 //}
 
 extension CartStore {
@@ -75,7 +80,7 @@ extension CartStore {
             "https://i.imgur.com/1twoaDy.jpeg",
             "https://i.imgur.com/FDwQgLy.jpeg",
             "https://i.imgur.com/kg1ZhhH.jpeg"
-            ])
-         ]
+        ])
+        ]
     }
 }
