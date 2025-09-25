@@ -37,6 +37,8 @@ struct CartInfoView: View {
     @State private var alertMessage = ""
     
     @Environment(\.dismiss) private var dismiss
+    
+    var onComplete: () -> Void = {}
 
     var body: some View {
         NavigationStack {
@@ -119,6 +121,7 @@ struct CartInfoView: View {
                 Section {
                     Button {
                         submit()
+                        onComplete()
                     } label: {
                         Text("Submit Order")
                             .frame(maxWidth: .infinity)
