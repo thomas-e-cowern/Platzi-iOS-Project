@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "name": "Clothes",
+        "slug": "clothes",
+        "image": "https://i.imgur.com/QkIa5tT.jpeg",
+        "creationAt": "2025-09-26T10:29:42.000Z",
+        "updatedAt": "2025-09-26T10:29:42.000Z"
+    },
+    {
+        "id": 2,
+        "name": "Electronics",
+        "slug": "electronics",
+        "image": "https://i.imgur.com/ZANVnHE.jpeg",
+        "creationAt": "2025-09-26T10:29:42.000Z",
+        "updatedAt": "2025-09-26T10:29:42.000Z"
+    },
+    {
+        "id": 3,
+        "name": "Furniture",
+        "slug": "furniture",
+        "image": "https://i.imgur.com/Qphac99.jpeg",
+        "creationAt": "2025-09-26T10:29:42.000Z",
+        "updatedAt": "2025-09-26T10:29:42.000Z"
+    },
+    {
+        "id": 4,
+        "name": "Shoes",
+        "slug": "shoes",
+        "image": "https://i.imgur.com/qNOjJje.jpeg",
+        "creationAt": "2025-09-26T10:29:42.000Z",
+        "updatedAt": "2025-09-26T10:29:42.000Z"
+    },
+    {
+        "id": 5,
+        "name": "Miscellaneous",
+        "slug": "miscellaneous",
+        "image": "https://i.imgur.com/BG8J0Fj.jpg",
+        "creationAt": "2025-09-26T10:29:42.000Z",
+        "updatedAt": "2025-09-26T10:29:42.000Z"
+    },
+    {
+        "id": 6,
+        "name": "Grosery",
+        "slug": "grosery",
+        "image": "https://placeimg.com/640/480/any",
+        "creationAt": "2025-09-26T11:02:37.000Z",
+        "updatedAt": "2025-09-26T11:02:37.000Z"
+    },
+    {
+        "id": 7,
+        "name": "Computer Category",
+        "slug": "computer-category",
+        "image": "https://placeimg.com/640/480/any",
+        "creationAt": "2025-09-26T11:02:40.000Z",
+        "updatedAt": "2025-09-26T11:02:40.000Z"
+    }
+]
