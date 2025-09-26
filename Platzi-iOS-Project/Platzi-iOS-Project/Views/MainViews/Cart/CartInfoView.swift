@@ -121,7 +121,6 @@ struct CartInfoView: View {
                 Section {
                     Button {
                         submit()
-                        onComplete()
                     } label: {
                         Text("Submit Order")
                             .frame(maxWidth: .infinity)
@@ -135,7 +134,7 @@ struct CartInfoView: View {
             .alert("Check your info", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {
                     if alertMessage == "Looks good! In a real app, this is where your order would be placed....." {
-                        dismiss()
+                        onComplete()
                     }
                 }
             } message: {
