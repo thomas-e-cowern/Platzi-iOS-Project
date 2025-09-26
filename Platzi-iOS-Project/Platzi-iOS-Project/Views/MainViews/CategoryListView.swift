@@ -76,3 +76,4 @@ struct CategoryListView: View {
     }
     .environment(PlatziStore(httpClient: HTTPClient()))
 }
+

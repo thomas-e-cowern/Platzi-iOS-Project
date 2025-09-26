@@ -31,6 +31,7 @@ struct Platzi_iOS_ProjectApp: App {
                     HomeView()
                         .environment(PlatziStore(httpClient: HTTPClient()))
                         .environment(cartStore)
+                        .environment(MockPlatziStore())
                 } else {
                     LoginView()
                 }
