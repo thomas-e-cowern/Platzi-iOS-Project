@@ -71,9 +71,17 @@ struct CategoryListView: View {
 }
 
 #Preview {
-    NavigationStack {
+    let store = MockPlatziStore(filename: "Categories")
+    return NavigationStack {
         CategoryListView()
     }
-    .environment(PlatziStore(httpClient: HTTPClient()))
+    .environment(store as PlatziStore) // <- exact type match
 }
+
+//#Preview {
+//    NavigationStack {
+//        CategoryListView()
+//    }
+//    .environment(PlatziStore(httpClient: HTTPClient()))
+//}
 
