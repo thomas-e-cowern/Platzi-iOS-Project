@@ -15,6 +15,9 @@ struct RegistrationView: View {
     @State private var registrationForm = RegistrationForm()
     @State private var errors: [String] = []
     @State private var responseMessage: String?
+    @State private var selectedItem: String?
+    
+    let avatars: [String] = ["https://avatar.iran.liara.run/public/1"]
     
     // MARK: - Body
     var body: some View {
@@ -23,6 +26,31 @@ struct RegistrationView: View {
                 TextField("Name", text: $registrationForm.name)
                 TextField("Email", text: $registrationForm.email)
                 SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
+                
+                ScrollView(.horizontal) {
+                    HStack {
+                        Picker(selection: $selectedItem) {
+                            ForEach(1..<25) { index in
+                                AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 200)
+                                        .clipped()
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                } placeholder: {
+                                    ImagePlaceholderView()
+                                        .frame(width: 200)
+                                        .overlay(ProgressView())
+                                }
+                            }
+                        } label: {
+                            Text("Select an Avatar")
+                        }
+                        
+                    }
+                }
+                
                 Button {
                     errors = registrationForm.validate()
                     if errors.isEmpty {
@@ -53,6 +81,8 @@ struct RegistrationView: View {
             }
             .navigationTitle("Register")
         }
+        
+        
     }
     
     // MARK: - Methods and functions
@@ -67,6 +97,14 @@ struct RegistrationView: View {
             responseMessage = error.localizedDescription
         }
         
+    }
+    
+    func getUrlFromString(string: String) -> URL? {
+        guard let url = URL(string: string) else {
+            return nil
+        }
+        
+        return url
     }
 }
 
