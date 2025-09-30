@@ -66,4 +66,25 @@ struct AuthenticationService {
             return true
         }
     }
+    
+    func getUserProfile() async throws -> UserProfile {
+        
+        var authorization: String = ""
+        
+        let accessToken = tokenStore.loadTokens().accessToken
+        
+        if let accessToken = accessToken {
+            authorization = accessToken
+        }
+        
+        let request = UserProfileRequest(authorization: authorization)
+        
+        let resource = Resource(url: Constants.Urls.getProfile, method: .get([]), modelType: UserProfile.self)
+        
+        let userProfileResponse = try await httpClient.load(resource)
+        
+        print(userProfileResponse)
+        
+        return userProfileResponse
+    }
 }
