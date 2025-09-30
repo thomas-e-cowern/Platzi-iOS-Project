@@ -39,6 +39,18 @@ struct LoginResponse: Codable {
     }
 }
 
+// MARK: - UserProfileRequest
+struct UserProfileRequest: Codable {
+    let authorization: String
+}
+
+struct UserProfile: Codable {
+    let id: Int
+    let name, email, password: String
+    let role: String
+    let avatar: String
+}
+
 // MARK: = RefreshResponse
 struct RefreshResponse: Codable {
     let accessToken: String
