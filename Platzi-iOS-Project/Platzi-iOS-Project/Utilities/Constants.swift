@@ -17,6 +17,7 @@ struct Constants {
         static let addCategory = URL(string: "https://api.escuelajs.co/api/v1/categories/")!
         static let addProduct = URL(string: "https://api.escuelajs.co/api/v1/products/")!
         static let locations = URL(string: "https://api.escuelajs.co/api/v1/locations")!
+        static let getProfile = URL(string: "https://api.escuelajs.co/api/v1/auth/profile")!
         
         static func getProductsByCategory(_ categoryId: Int) -> URL {
             return URL(string: "https://api.escuelajs.co/api/v1/categories/\(categoryId)/products")!
