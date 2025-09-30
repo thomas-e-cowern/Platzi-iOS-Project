@@ -15,9 +15,9 @@ struct RegistrationView: View {
     @State private var registrationForm = RegistrationForm()
     @State private var errors: [String] = []
     @State private var responseMessage: String?
-    @State private var selectedItem: String?
+    @State private var selectedItem: String = ""
     
-    let avatars: [String] = ["https://avatar.iran.liara.run/public/1"]
+    @State private var avatar: String?
     
     // MARK: - Body
     var body: some View {
@@ -27,9 +27,8 @@ struct RegistrationView: View {
                 TextField("Email", text: $registrationForm.email)
                 SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
                 
-                ScrollView(.horizontal) {
-                    HStack {
-                        Picker(selection: $selectedItem) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
                             ForEach(1..<25) { index in
                                 AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
                                     image
@@ -38,18 +37,19 @@ struct RegistrationView: View {
                                         .frame(width: 200)
                                         .clipped()
                                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .onTapGesture {
+                                            selectedItem = "https://avatar.iran.liara.run/public/\(index)"
+                                        }
                                 } placeholder: {
                                     ImagePlaceholderView()
                                         .frame(width: 200)
                                         .overlay(ProgressView())
                                 }
                             }
-                        } label: {
-                            Text("Select an Avatar")
-                        }
-                        
                     }
+                    .padding(.horizontal) // Add horizontal padding to the entire HStack
                 }
+                Text(selectedItem)
                 
                 Button {
                     errors = registrationForm.validate()
@@ -88,7 +88,7 @@ struct RegistrationView: View {
     // MARK: - Methods and functions
     func register() async {
         do {
-            _ = try await authenticatinService.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password)
+            _ = try await authenticatinService.register(name: registrationForm.name, email: registrationForm.email, password: registrationForm.password, avatar: selectedItem)
             
             responseMessage = "registration for \(registrationForm.name) successful"
             
