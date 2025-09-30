@@ -11,8 +11,8 @@ struct AuthenticationService {
     let httpClient: HTTPClient
     let tokenStore = TokenStore()
     
-    func register(name: String, email: String, password: String, role: String = "customer", avatar: String = "https://avatar.iran.liara.run/public/9") async throws -> RegistrationResponse {
-
+    func register(name: String, email: String, password: String, role: String = "customer", avatar: String) async throws -> RegistrationResponse {
+        print("Avatar: \(avatar)")
         let request = RegistrationRequest(name: name, email: email, password: password, role: role, avatar: avatar)
         
         let resource = Resource(url: Constants.Urls.register, method: .post(try request.encode()), modelType: RegistrationResponse.self)
