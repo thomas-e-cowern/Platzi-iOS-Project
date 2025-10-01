@@ -62,6 +62,7 @@ struct ProfileView: View {
     
     func getUserProfile() async -> UserProfile? {
         do {
+            await authenticationService.probeProfileDirect()
             userProfile = try await authenticationService.getUserProfile()
             return userProfile
         } catch {
