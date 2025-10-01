@@ -9,21 +9,17 @@ import Foundation
 import Security
 
 enum HTTPMethod {
-    case get([URLQueryItem])
+    case get([URLQueryItem]?)   // ← allow nil to distinguish “no query”
     case post(Data?)
-    case delete
     case put(Data?)
-    
+    case delete
+
     var name: String {
         switch self {
-        case .get:
-            return "GET"
-        case .post:
-            return "POST"
-        case .delete:
-            return "DELETE"
-        case .put:
-            return "PUT"
+        case .get: return "GET"
+        case .post: return "POST"
+        case .put: return "PUT"
+        case .delete: return "DELETE"
         }
     }
 }
@@ -62,45 +58,64 @@ struct HTTPClient {
     
     private func performRequest<T: Codable>(_ resource: Resource<T>) async throws -> T {
         var request = URLRequest(url: resource.url)
-        
+
         switch resource.method {
         case .get(let queryItems):
-            var components = URLComponents(url: resource.url, resolvingAgainstBaseURL: false)
-            components?.queryItems = queryItems
-            guard let url = components?.url else {
-                throw NetworkError.badRequest
+            if let items = queryItems, !items.isEmpty {
+                var components = URLComponents(url: resource.url, resolvingAgainstBaseURL: false)
+                components?.queryItems = items
+                guard let url = components?.url else {
+                    throw NetworkError.badRequest
+                }
+                request.url = url
+            } else {
+                // No query → ensure we DO NOT end with a dangling "?"
+                request.url = resource.url
             }
-            request.url = url
+
         case .delete:
             request.httpMethod = resource.method.name
+
         case .post(let data):
             request.httpMethod = resource.method.name
             request.httpBody = data
+
         case .put(let data):
             request.httpMethod = resource.method.name
             request.httpBody = data
         }
-        
-        // add authorizaion header: accessToken
-        if let accessToken = tokenStore.loadTokens().accessToken {
+
+        // Default headers (add these before custom headers so callers can override)
+        if request.httpBody != nil && request.value(forHTTPHeaderField: "Content-Type") == nil {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        if request.value(forHTTPHeaderField: "Accept") == nil {
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+        }
+
+        // Authorization header
+        if let accessToken = tokenStore.loadTokens().accessToken, !accessToken.isEmpty {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
-        
+
+        // Custom per-request headers (can override defaults)
         if let headers = resource.headers {
             for (key, value) in headers {
                 request.setValue(value, forHTTPHeaderField: key)
             }
         }
-        
+
         let (data, response) = try await session.data(for: request)
-        
+
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
         }
-        
+
         switch httpResponse.statusCode {
         case 200..<300:
             break
+        case 400:
+            throw NetworkError.badRequest
         case 401:
             throw NetworkError.unauthorized
         case 404:
@@ -108,14 +123,17 @@ struct HTTPClient {
         default:
             throw NetworkError.undefined(data, httpResponse)
         }
-        
+
         do {
+            // Decode as the requested model type
             return try JSONDecoder().decode(resource.modelType, from: data)
+            // or: return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            throw NetworkError.decodingError(error.localizedDescription as! Error)
+            // Don't force-cast a String to Error; bubble the real decoding error
+            throw NetworkError.decodingError(error)
         }
-        
     }
+
     
     func refreshToken() async throws {
         let refreshToken =  tokenStore.loadTokens().refreshToken
