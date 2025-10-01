@@ -73,7 +73,7 @@ struct AuthenticationService {
             .trimmingCharacters(in: .whitespacesAndNewlines),
               !rawToken.isEmpty
         else {
-            throw NetworkError.unauthorized // or your own MissingToken error
+            throw NetworkError.unauthorized() // or your own MissingToken error
         }
 
         // Strip accidental quotes if the token was JSON-encoded as a string
@@ -121,7 +121,7 @@ struct AuthenticationService {
         guard let raw = tokenStore.loadTokens().accessToken?
             .trimmingCharacters(in: .whitespacesAndNewlines),
               !raw.isEmpty else {
-            throw NetworkError.unauthorized
+            throw NetworkError.unauthorized()
         }
         // If token was JSON-encoded with quotes, strip them: "\"eyJ…\"" → "eyJ…"
         return raw.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))

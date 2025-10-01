@@ -10,6 +10,10 @@ import SwiftUI
 struct ProfileView: View {
     
     @Environment(\.authenticationService) private var authenticationService
+    
+    @Environment(\.runWithErrorHandling) private var runWithErrorHandling
+    @Environment(\.presentNetworkError) private var presentNetworkError
+    
     @State var userProfile: UserProfile?
     
     var body: some View {
@@ -35,7 +39,7 @@ struct ProfileView: View {
                         ImagePlaceholderView()
                             .frame(width: 200)
                     }
-
+                    
                     Button {
                         authenticationService.signout()
                     } label: {
@@ -48,6 +52,8 @@ struct ProfileView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                     .padding()
+                    
+                    DebugErrorButton()
                 }
                 .onAppear {
                     Task {
@@ -65,12 +71,14 @@ struct ProfileView: View {
             await authenticationService.probeProfileDirect()
             userProfile = try await authenticationService.getUserProfile()
             return userProfile
+        } catch let e as NetworkError {
+            presentNetworkError(e, "Profile Error")
         } catch {
-            print("Failed to fetch user profile: \(error)")
-            return nil
+            presentNetworkError(.transport(error), "Profile Error")
         }
+        return nil
     }
-
+    
 }
 
 #Preview {

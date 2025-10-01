@@ -63,8 +63,15 @@ struct RefreshResponse: Codable {
 }
 
 // MARK: - ErrorResponse
+//struct ErrorResponse: Codable {
+//    let message: String?
+//}
+
 struct ErrorResponse: Codable {
     let message: String?
+    let error: String?
+    let statusCode: Int?
+    let details: String?
 }
 
 // MARK: - Categories
