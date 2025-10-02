@@ -38,7 +38,7 @@ struct RegistrationView: View {
                                     .clipped()
                                     .clipShape(RoundedRectangle(cornerRadius: 12))
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
+                                        Circle()
                                             .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5) // Adds a rounded border
                                     )
 //                                    .border(selectedItem.contains("\(index)") ? Color.red : Color.clear, width: 5)
