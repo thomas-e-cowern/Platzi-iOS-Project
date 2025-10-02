@@ -10,7 +10,6 @@ import SwiftUI
 struct ProfileView: View {
     
     @Environment(\.authenticationService) private var authenticationService
-    
     @Environment(\.runWithErrorHandling) private var runWithErrorHandling
     @Environment(\.presentNetworkError) private var presentNetworkError
     
