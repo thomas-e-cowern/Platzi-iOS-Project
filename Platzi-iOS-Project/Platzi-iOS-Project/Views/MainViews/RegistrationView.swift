@@ -16,8 +16,8 @@ struct RegistrationView: View {
     @State private var errors: [String] = []
     @State private var responseMessage: String?
     @State private var selectedItem: String = ""
-    
     @State private var avatar: String?
+    @State private var isClicked: Bool = false
     
     // MARK: - Body
     var body: some View {
@@ -29,23 +29,29 @@ struct RegistrationView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                            ForEach(1..<25) { index in
-                                AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 200)
-                                        .clipped()
-                                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        .onTapGesture {
-                                            selectedItem = "https://avatar.iran.liara.run/public/\(index)"
-                                        }
-                                } placeholder: {
-                                    ImagePlaceholderView()
-                                        .frame(width: 200)
-                                        .overlay(ProgressView())
-                                }
+                        ForEach(1..<25) { index in
+                            AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 200)
+                                    .clipped()
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5) // Adds a rounded border
+                                    )
+//                                    .border(selectedItem.contains("\(index)") ? Color.red : Color.clear, width: 5)
+                                    .onTapGesture {
+                                        selectedItem = "https://avatar.iran.liara.run/public/\(index)"
+                                        isClicked.toggle()
+                                    }
+                            } placeholder: {
+                                ImagePlaceholderView()
+                                    .frame(width: 200)
+                                    .overlay(ProgressView())
                             }
+                        }
                     }
                     .padding(.horizontal) // Add horizontal padding to the entire HStack
                 }
