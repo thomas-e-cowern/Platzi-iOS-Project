@@ -41,7 +41,6 @@ struct RegistrationView: View {
                                         Circle()
                                             .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5) // Adds a rounded border
                                     )
-//                                    .border(selectedItem.contains("\(index)") ? Color.red : Color.clear, width: 5)
                                     .onTapGesture {
                                         selectedItem = "https://avatar.iran.liara.run/public/\(index)"
                                         isClicked.toggle()
