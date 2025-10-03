@@ -23,38 +23,43 @@ struct RegistrationView: View {
     var body: some View {
         NavigationStack {
             Form {
-                TextField("Name", text: $registrationForm.name)
-                TextField("Email", text: $registrationForm.email)
-                SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(1..<25) { index in
-                            AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 200)
-                                    .clipped()
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                                    .overlay(
-                                        Circle()
-                                            .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5)
-                                    )
-                                    .onTapGesture {
-                                        selectedItem = "https://avatar.iran.liara.run/public/\(index)"
-                                        isClicked.toggle()
-                                    }
-                            } placeholder: {
-                                ImagePlaceholderView()
-                                    .frame(width: 200)
-                                    .overlay(ProgressView())
+                Section{
+                    TextField("Name", text: $registrationForm.name)
+                    TextField("Email", text: $registrationForm.email)
+                    SecureField("Password must be 8 characters or longer", text: $registrationForm.password)
+                }
+                Section {
+                    Text("Choose an avatar")
+                        .font(.callout)
+                        .foregroundStyle(.gray)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(1..<25) { index in
+                                AsyncImage(url: URL(string: "https://avatar.iran.liara.run/public/\(index)")) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 200)
+                                        .clipped()
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .overlay(
+                                            Circle()
+                                                .stroke(selectedItem.contains("\(index)") ? Color.green : Color.clear, lineWidth: 5)
+                                        )
+                                        .onTapGesture {
+                                            selectedItem = "https://avatar.iran.liara.run/public/\(index)"
+                                            isClicked.toggle()
+                                        }
+                                } placeholder: {
+                                    ImagePlaceholderView()
+                                        .frame(width: 200)
+                                        .overlay(ProgressView())
+                                }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
-                
                 Button {
                     errors = registrationForm.validate()
                     if errors.isEmpty {
