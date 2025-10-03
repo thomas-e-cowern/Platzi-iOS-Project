@@ -39,7 +39,7 @@ struct RegistrationView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 12))
                                     .overlay(
                                         Circle()
-                                            .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5) // Adds a rounded border
+                                            .stroke(selectedItem.contains("\(index)") ? Color.red : Color.clear, lineWidth: 5)
                                     )
                                     .onTapGesture {
                                         selectedItem = "https://avatar.iran.liara.run/public/\(index)"
@@ -52,9 +52,8 @@ struct RegistrationView: View {
                             }
                         }
                     }
-                    .padding(.horizontal) // Add horizontal padding to the entire HStack
+                    .padding(.horizontal)
                 }
-                Text(selectedItem)
                 
                 Button {
                     errors = registrationForm.validate()
@@ -102,14 +101,6 @@ struct RegistrationView: View {
             responseMessage = error.localizedDescription
         }
         
-    }
-    
-    func getUrlFromString(string: String) -> URL? {
-        guard let url = URL(string: string) else {
-            return nil
-        }
-        
-        return url
     }
 }
 
