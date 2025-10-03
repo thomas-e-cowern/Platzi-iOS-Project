@@ -24,13 +24,13 @@ struct HomeView: View {
                     LocationView()
                 }
             }
-            Tab("Profile", systemImage: "gear") {
-                ProfileView()
-            }
             Tab("Cart", systemImage: "cart") {
                 CartView()
             }
             .badge(cartStore.cartProducts.count)
+            Tab("Profile", systemImage: "gear") {
+                ProfileView()
+            }
         } // MARK: - End of Tab
     }
 }
