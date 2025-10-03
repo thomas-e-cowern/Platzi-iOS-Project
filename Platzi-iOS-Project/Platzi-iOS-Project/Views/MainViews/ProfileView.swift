@@ -18,48 +18,69 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                
-                VStack {
-                    if let avatar = userProfile?.avatar, let url = URL(string: avatar) {
-                        AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 200)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                        } placeholder: {
-                            ImagePlaceholderView()
-                                .frame(width: 200)
-                                .overlay(ProgressView())
+                Form {
+                    Section {
+                        HStack {
+                            Spacer()
+                            if let avatar = userProfile?.avatar, let url = URL(string: avatar) {
+                                AsyncImage(url: url) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 200)
+                                        .clipped()
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                } placeholder: {
+                                    ImagePlaceholderView()
+                                        .frame(width: 200)
+                                        .overlay(ProgressView())
+                                }
+                                
+                            } else {
+                                ImagePlaceholderView()
+                                    .frame(width: 200)
+                            }
+                            Spacer()
                         }
-                    } else {
-                        ImagePlaceholderView()
-                            .frame(width: 200)
+                    }
+                    header: {
+                        Text("Avatar")
                     }
                     
-                    Button {
-                        authenticationService.signout()
-                    } label: {
-                        Text("Sign Out")
-                            .font(.title)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(.red.opacity(0.2)))
-                            .foregroundStyle(.red)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                    .padding()
                     
-//                    DebugErrorButton()
-                }
-                .onAppear {
-                    Task {
-                        await getUserProfile()
+                    Section {
+                        if let userProfile {
+                            Text(userProfile.name)
+                            Text(userProfile.email)
+                        }
+                    } header: {
+                        Text("Basic Info")
+                    }
+                    
+                    
+                    Section {
+                        Button {
+                            authenticationService.signout()
+                        } label: {
+                            Text("Sign Out")
+                                .font(.title)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(.red.opacity(0.2)))
+                                .foregroundStyle(.red)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                        .padding()
+                    }
+                    
+                    //                    DebugErrorButton()
+                    
+                    .onAppear {
+                        Task {
+                            await getUserProfile()
+                        }
                     }
                 }
-                
             }
             .navigationTitle("Profile")
         }
