@@ -52,7 +52,7 @@ struct ProfileView: View {
                     }
                     .padding()
                     
-                    DebugErrorButton()
+//                    DebugErrorButton()
                 }
                 .onAppear {
                     Task {
