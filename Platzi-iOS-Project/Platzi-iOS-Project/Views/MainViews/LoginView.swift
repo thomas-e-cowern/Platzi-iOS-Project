@@ -16,6 +16,7 @@ struct LoginView: View {
     @State private var email: String = "john@mail.com"
     @State private var password: String = "changeme"
     @State private var showRegisterView: Bool = false
+    @State private var showEmployeeLogin: Bool = false
     @State private var isSubmitting: Bool = false
 
     // Invalid if email is empty/whitespace OR password fails your validation
@@ -58,8 +59,14 @@ struct LoginView: View {
                 } label: {
                     Text("Don't have an account? Register here…")
                 }
+                
+                Button {
+                    showEmployeeLogin = true
+                } label: {
+                    Text("Looking for the employee login? click here…")
+                }
             }
-            .navigationTitle("Login")
+            .navigationTitle("Customer Login")
             .sheet(isPresented: $showRegisterView) {
                 RegistrationView()
             }
