@@ -54,19 +54,31 @@ struct LoginView: View {
                 }
                 .disabled(isFormInvalid || isSubmitting)
 
-                Button {
-                    showRegisterView = true
-                } label: {
-                    Text("Don't have an account? Register here…")
+                if showEmployeeLogin {
+                    Button {
+                        showEmployeeLogin = false
+                    } label: {
+                        Text("Looking for customer login? click here…")
+                    }
+                } else {
+                    Button {
+                        showRegisterView = true
+                    } label: {
+                        Text("Don't have an account? Register here…")
+                    }
                 }
                 
-                Button {
-                    showEmployeeLogin = true
-                } label: {
-                    Text("Looking for the employee login? click here…")
+                if !showEmployeeLogin {
+                    Button {
+                        showEmployeeLogin = true
+                    } label: {
+                        Text("Looking for the employee login? click here…")
+                    }
+                } else {
+                    
                 }
             }
-            .navigationTitle("Customer Login")
+            .navigationTitle(showEmployeeLogin ? "Employee Login" : "Customer Login")
             .sheet(isPresented: $showRegisterView) {
                 RegistrationView()
             }
