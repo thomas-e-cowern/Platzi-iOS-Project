@@ -8,35 +8,48 @@
 import SwiftUI
 
 struct HomeView: View {
-    
     @Environment(\.authenticationService) private var authenticationService
     @Environment(CartStore.self) private var cartStore
-    
+//    @Environment(\.userSessionOptional) private var userSession
+    @Environment(\.userSession) private var userSession
+
     var body: some View {
         TabView {
             Tab("Category List", systemImage: "person") {
-                NavigationStack {
-                    CategoryListView()
-                }
+                NavigationStack { CategoryListView() }
             }
             Tab("Location", systemImage: "pin") {
-                NavigationStack {
-                    LocationView()
-                }
+                NavigationStack { LocationView() }
             }
-            Tab("Cart", systemImage: "cart") {
-                CartView()
+
+            if userSession.role == .customer {
+                Tab("Cart", systemImage: "cart") { CartView() }
+                    .badge(cartStore.cartProducts.count)
             }
-            .badge(cartStore.cartProducts.count)
-            Tab("Profile", systemImage: "gear") {
-                ProfileView()
-            }
-        } // MARK: - End of Tab
+
+            Tab("Profile", systemImage: "gear") { ProfileView() }
+        }
     }
 }
 
-#Preview {
+
+#Preview("Customer") {
     HomeView()
-        .environment(PlatziStore(httpClient: HTTPClient()))
+        .environment(\.userSessionOptional, {
+            let s = UserSession()
+            s.updateRole(.customer)
+            return s
+        }())
         .environment(CartStore())
 }
+
+#Preview("Employee") {
+    HomeView()
+        .environment(\.userSessionOptional, {
+            let s = UserSession()
+            s.updateRole(.admin)
+            return s
+        }())
+        .environment(CartStore())
+}
+
