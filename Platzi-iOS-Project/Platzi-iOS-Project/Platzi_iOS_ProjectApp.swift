@@ -6,6 +6,7 @@ struct Platzi_iOS_ProjectApp: App {
     @Environment(\.authenticationService) private var authenticationService
     @State private var isLoading: Bool = true
     @State private var cartStore = CartStore()
+    @State private var session = UserSession()
 
     var body: some Scene {
         WindowGroup {
@@ -29,6 +30,7 @@ struct Platzi_iOS_ProjectApp: App {
                             .environment(PlatziStore(httpClient: HTTPClient()))
                             .environment(cartStore)
                             .environment(MockPlatziStore())
+                            .environment(session)
 
                     } else {
                         LoginView()
