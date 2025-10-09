@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct RoleRestricted: ViewModifier {
-    @Environment(\.userSession) private var session
+    @Environment(\.userSessionOptional) private var session
     let allowed: Set<UserRole>
 
     func body(content: Content) -> some View {
-        Group {
-            if allowed.contains(session.role) {
-                content
-            }
+        if let role = session?.role, allowed.contains(role) {
+            content
+        } else {
+            EmptyView()
         }
     }
 }
@@ -25,4 +25,3 @@ extension View {
         modifier(RoleRestricted(allowed: Set(roles)))
     }
 }
-
