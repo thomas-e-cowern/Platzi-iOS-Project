@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
+
+// 1) The key stores an *optional* to avoid constructing on a nonisolated context.
+struct UserSessionKey: EnvironmentKey {
+    static let defaultValue: UserSession? = nil
+}
