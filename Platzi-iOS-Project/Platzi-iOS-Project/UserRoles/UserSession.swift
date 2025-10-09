@@ -5,30 +5,30 @@
 //  Created by Thomas Cowern on 10/9/25.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
 enum UserRole: String, Codable, CaseIterable, Equatable {
-    case employee
-    case customer
+    case admin, customer
 }
 
 @Observable
 @MainActor
 final class UserSession {
-    /// Persist the role across launches
-    @AppStorage("userRole") private var storedRole: String = UserRole.customer.rawValue
+    private enum Keys {
+        static let userRole = "userRole"
+    }
 
-    private(set) var role: UserRole = .customer
+   private(set) var role: UserRole
 
     init() {
-        role = UserRole(rawValue: storedRole) ?? .customer
+        let saved = UserDefaults.standard.string(forKey: Keys.userRole)
+        self.role = UserRole(rawValue: saved ?? "") ?? .customer
     }
 
     func updateRole(_ newRole: UserRole) {
         guard role != newRole else { return }
         role = newRole
-        storedRole = newRole.rawValue
+        UserDefaults.standard.set(newRole.rawValue, forKey: Keys.userRole)
     }
 }
-
