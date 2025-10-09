@@ -37,3 +37,24 @@ extension EnvironmentValues {
         set { self[RunWithErrorHandlingKey.self] = newValue }
     }
 }
+
+extension EnvironmentValues {
+    /// Use this everywhere while stabilizing injection. It will never crash.
+    
+    @MainActor
+    var userSession: UserSession {
+        get {
+            guard let session = self[UserSessionKey.self] else {
+                fatalError("UserSession missing. Inject it with `.environment(\\.userSession, session)` at the app root.")
+            }
+            return session
+        }
+        set { self[UserSessionKey.self] = newValue }
+    }
+    
+    @MainActor
+    var userSessionOptional: UserSession? {
+        get { self[UserSessionKey.self] }
+        set { self[UserSessionKey.self] = newValue }
+    }
+}
