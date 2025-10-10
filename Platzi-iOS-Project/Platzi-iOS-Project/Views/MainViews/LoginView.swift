@@ -10,6 +10,7 @@ struct LoginView: View {
 
     @Environment(\.authenticationService) private var authenticationService
     @Environment(\.presentNetworkError) private var presentNetworkError
+    @Environment(\.userSession) private var userSession
 
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
 
@@ -86,28 +87,68 @@ struct LoginView: View {
     }
 
     // MARK: - Actions
-
+    
     private func submitLogin() {
         guard !isFormInvalid, !isSubmitting else { return }
         isSubmitting = true
 
         Task {
             do {
+                // 1. Perform login
                 let success = try await authenticationService.login(email: email, password: password)
+
+                // 2. If successful, decide user role
+                if success {
+                    await MainActor.run {
+                        // Example logic — replace with your backend role info
+                        if showEmployeeLogin {
+                            userSession.updateRole(.admin)
+                            print("➡️➡️ \(userSession.role)")
+                        } else {
+                            userSession.updateRole(.customer)
+                        }
+                    }
+                }
+
+                // 3. Update login state
                 await MainActor.run {
                     isLoggedIn = success
                     isSubmitting = false
                 }
+
             } catch let e as NetworkError {
                 await MainActor.run { isSubmitting = false }
-                // ✅ Show friendly error via environment-only presenter
                 presentNetworkError(e, "Login Failed")
+
             } catch {
                 await MainActor.run { isSubmitting = false }
                 presentNetworkError(.transport(error), "Login Failed")
             }
         }
     }
+
+
+//    private func submitLogin() {
+//        guard !isFormInvalid, !isSubmitting else { return }
+//        isSubmitting = true
+//
+//        Task {
+//            do {
+//                let success = try await authenticationService.login(email: email, password: password)
+//                await MainActor.run {
+//                    isLoggedIn = success
+//                    isSubmitting = false
+//                }
+//            } catch let e as NetworkError {
+//                await MainActor.run { isSubmitting = false }
+//                // ✅ Show friendly error via environment-only presenter
+//                presentNetworkError(e, "Login Failed")
+//            } catch {
+//                await MainActor.run { isSubmitting = false }
+//                presentNetworkError(.transport(error), "Login Failed")
+//            }
+//        }
+//    }
 }
 
 
