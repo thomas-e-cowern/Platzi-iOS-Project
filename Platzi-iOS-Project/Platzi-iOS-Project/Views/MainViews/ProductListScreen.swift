@@ -12,6 +12,7 @@ struct ProductListScreen: View {
     let category: Category
     
     @Environment(PlatziStore.self) private var platziStore
+    @Environment(\.userSession) private var userSession
     @State private var products: [Product] = []
     @State private var isLoading: Bool = false
     @State private var showAddProductScreen: Bool = false
@@ -47,13 +48,14 @@ struct ProductListScreen: View {
         }
         .navigationTitle(category.name)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showAddProductScreen.toggle()
-                } label: {
-                    Text("Add New Product")
+            if userSession.role == .admin {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showAddProductScreen.toggle()
+                    } label: {
+                        Text("Add New Product")
+                    }
                 }
-
             }
         }
         .sheet(isPresented: $showAddProductScreen) {
