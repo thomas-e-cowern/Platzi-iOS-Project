@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryListView: View {
     
     @Environment(PlatziStore.self) private var platziStore
+    @Environment(\.userSession) private var userSession
     @State private var isLoading: Bool = false
     @State private var showAddCategoryView: Bool = false
     
@@ -34,9 +35,11 @@ struct CategoryListView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Add Category") {
-                    showAddCategoryView.toggle()
+            if userSession.role == .admin {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Category") {
+                        showAddCategoryView.toggle()
+                    }
                 }
             }
         }
