@@ -16,6 +16,7 @@ class CartStore {
     
     
     var cartProducts: [Product] = []
+    var favorites: [Product] = []
     
     var total: Int {
         cartProducts.reduce(0) { $0 + ($1.price * $1.quantityOrdered) }
