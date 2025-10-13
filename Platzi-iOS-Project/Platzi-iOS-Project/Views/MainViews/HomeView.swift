@@ -26,6 +26,12 @@ struct HomeView: View {
                 Tab("Cart", systemImage: "cart") { CartView() }
                     .badge(cartStore.cartProducts.count)
             }
+            
+            if userSession.role == .customer {
+                Tab("Favorites", systemImage: "heart.fill") {
+                    FavoritesView()
+                }
+            }
 
             Tab("Profile", systemImage: "gear") { ProfileView() }
         }
