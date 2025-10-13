@@ -12,6 +12,7 @@ struct ProductDetailView: View {
     @Environment(CartStore.self) private var cartStore
     
     var product: Product
+    @State private var isFavorite: Bool = false
     
     var body: some View {
         ScrollView {
@@ -40,12 +41,35 @@ struct ProductDetailView: View {
                     Text("Add to Cart")
                 }
                 .buttonStyle(.bordered)
+                
+                Button {
+                    isFavorite.toggle()
+                    updateFavorites(id: product.id)
+                } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                }
+                .padding(.top, 12)
+                
 
             }
             .padding()
         }
         .navigationTitle(product.title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    func updateFavorites(id: Int) {
+        if isFavorite == true {
+            cartStore.favorites.append(product)
+            print("Add to favorites...")
+            print(cartStore.favorites)
+            print(cartStore.favorites.count)
+        } else {
+            cartStore.favorites.removeAll { $0.id == id }
+            print("removed from favorites...")
+            print(cartStore.favorites)
+            print(cartStore.favorites.count)
+        }
     }
 }
 
