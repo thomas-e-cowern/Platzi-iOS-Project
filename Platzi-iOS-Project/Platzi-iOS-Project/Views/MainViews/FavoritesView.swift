@@ -24,15 +24,43 @@ struct FavoritesView: View {
 
     var body: some View {
         ZStack {
-            if productsArray.isEmpty {
+            if productsArray.isEmpty && !isLoading {
                 ContentUnavailableView("No Products Available", systemImage: "shippingbox")
+            } else if isLoading {
+                ProgressView("Loading Favorites…")
             } else {
                 List {
                     ForEach(productsArray, id: \.id) { product in
                         if product.title == "Product unavailable" {
-                            Text("Product no longer available")
-                                .font(.caption)
-                                .foregroundStyle(.red)
+                            NavigationLink {
+                                UnavailableProductView(
+                                    productId: product.id,
+                                    onRemove: { removeFavorite(product.id) }
+                                )
+                            } label: {
+                                HStack {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundStyle(.red)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Product no longer available")
+                                            .font(.headline)
+                                            .foregroundStyle(.red)
+                                        Text("This item has been removed or is no longer sold.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Product no longer available. Double-tap for details.")
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    removeFavorite(product.id)
+                                } label: {
+                                    Label("Remove", systemImage: "trash")
+                                }
+                            }
                         } else {
                             if let image = product.images.first {
                                 NavigationLink {
@@ -47,26 +75,67 @@ struct FavoritesView: View {
                 .navigationTitle("Favorites")
             }
         }
-        .task {   // preferred over onAppear for one-shot loads
-            isLoading = true
-            let results = await loadProductsByIdsLenient(Array(favorites.favoriteIDs))
-
-            // Convert [Result<Product?, Error>] -> [Product]
-            let loaded: [Product] = results.compactMap { res in
-                switch res {
-                case .success(let product): return product       // may be the “unavailable” placeholder
-                case .failure: return nil                        // drop hard failures, or make another placeholder
-                }
-            }
-
-            await MainActor.run {
-                self.products = loaded
-                self.isLoading = false
-            }
+        .task {
+            await fetchFavorites()
         }
     }
 
-    /// Returns results aligned to `ids` (same count, same order).
+    // MARK: - Fetch favorites
+
+    private func fetchFavorites() async {
+        await MainActor.run { isLoading = true }
+
+        let results = await loadProductsByIdsLenient(Array(favorites.favoriteIDs))
+
+        let loaded: [Product] = results.enumerated().map { (index, result) in
+            switch result {
+            case .success(let product):
+                // Return real product or placeholder if nil
+                return product ?? unavailablePlaceholder(for: Array(favorites.favoriteIDs)[index])
+            case .failure:
+                // Return placeholder for any error
+                return unavailablePlaceholder(for: Array(favorites.favoriteIDs)[index])
+            }
+        }
+
+        await MainActor.run {
+            self.products = loaded
+            self.isLoading = false
+        }
+    }
+    
+    
+    // MARK: - Remove Favorite
+    
+    private func removeFavorite(_ id: Int) {
+        // If your Favorites type exposes a method:
+        favorites.remove(id)
+
+        // If it only exposes the Set, use this instead:
+        // favorites.favoriteIDs.remove(id)
+
+        withAnimation {
+            products.removeAll { $0.id == id }
+        }
+    }
+
+
+    // MARK: - Placeholder factory
+
+    private func unavailablePlaceholder(for id: Int) -> Product {
+        Product(
+            id: id,
+            title: "Product unavailable",
+            slug: "product-unavailable",
+            price: 0,
+            description: "This product is no longer available.",
+            category: Category(id: 0, name: "Unavailable", slug: "", image: ""),
+            images: []
+        )
+    }
+
+    // MARK: - Batch loader
+
     func loadProductsByIdsLenient(_ ids: [Int]) async -> [Result<Product?, Error>] {
         await withTaskGroup(of: (Int, Result<Product?, Error>).self) { group in
             for (i, id) in ids.enumerated() {
@@ -77,17 +146,7 @@ struct FavoritesView: View {
                     } catch let error as NetworkError {
                         switch error {
                         case .badRequest:
-                            // Product no longer available → return placeholder
-                            let unavailable = Product(
-                                id: id,
-                                title: "Product unavailable",
-                                slug: "product-unavailable",
-                                price: 0,
-                                description: "This product is no longer available.",
-                                category: Category(id: 0, name: "Unavailable", slug: "", image: ""),
-                                images: []
-                            )
-                            return (i, .success(unavailable))
+                            return (i, .success(nil)) // mark unavailable
                         default:
                             return (i, .failure(error))
                         }
