@@ -38,6 +38,12 @@ class PlatziStore {
         return try await httpClient.load(resource)
     }
     
+    func loadOneProductById(_ productId: Int) async throws -> Product {
+        let getProductRequest = GetProductById(productId: productId)
+        let resource = Resource(url: Constants.Urls.getProductById(productId), modelType: Product.self)
+        return try await httpClient.load(resource)
+    }
+    
     func addProduct(title: String, price: Int, description: String, categoryId: Int, images: [String]) async throws -> Product {
         let addProductRequest = AddProduct(title: title, price: price, description: description, categoryId: categoryId, images: images)
         let resource = Resource(url: Constants.Urls.addProduct, method: .post(try addProductRequest.encode()), modelType: Product.self)
