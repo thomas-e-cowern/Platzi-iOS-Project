@@ -29,7 +29,9 @@ struct HomeView: View {
             
             if userSession.role == .customer {
                 Tab("Favorites", systemImage: "heart.fill") {
-                    FavoritesView()
+                    NavigationStack {
+                        FavoritesView()
+                    }
                 }
             }
 
