@@ -16,6 +16,7 @@ struct Constants {
         static let categories = URL(string: "https://api.escuelajs.co/api/v1/categories")!
         static let addCategory = URL(string: "https://api.escuelajs.co/api/v1/categories/")!
         static let addProduct = URL(string: "https://api.escuelajs.co/api/v1/products/")!
+        
         static let locations = URL(string: "https://api.escuelajs.co/api/v1/locations")!
         static let getProfile = URL(string: "https://api.escuelajs.co/api/v1/auth/profile")!
         
@@ -25,6 +26,10 @@ struct Constants {
         
         static func deleteProductById(_ productId: Int) -> URL {
             return URL(string: "https://api.escuelajs.co/api/v1/products/\(productId)")!
+        }
+        
+        static func getProductById(_ productId: Int) -> URL {
+            return  URL(string: "https://api.escuelajs.co/api/v1/products/\(productId)")!
         }
     }
 }
