@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import SwiftData
 
 // MARK: - User
 struct RegistrationResponse: Codable {
@@ -118,6 +119,10 @@ struct AddProduct: Codable {
     let images: [String]
 }
 
+struct GetProductById: Codable {
+    let productId: Int
+}
+
 // MARK: - Location
 struct Location: Codable, Identifiable {
     let id: Int
@@ -130,6 +135,8 @@ struct Location: Codable, Identifiable {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
+
+
 
 // MARK: - PreviewProduct
 extension Product {
