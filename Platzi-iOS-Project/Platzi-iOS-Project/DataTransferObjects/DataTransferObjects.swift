@@ -100,6 +100,9 @@ struct Product: Codable, Identifiable, Equatable {
     // Local-only, dynamic cart quantity
     var quantityOrdered: Int = 1
     
+    // Local-only, to manage item in Favorites
+    var isFavorite: Bool = false
+    
     // ✅ Exclude quantityOrdered so Codable ignores it
     private enum CodingKeys: String, CodingKey {
         case id, title, slug, price, description, category, images
