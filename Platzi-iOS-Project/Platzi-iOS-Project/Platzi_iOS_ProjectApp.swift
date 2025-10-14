@@ -8,6 +8,7 @@ struct Platzi_iOS_ProjectApp: App {
     @State private var isLoading = true
     @State private var cartStore = CartStore()
     @State private var session = UserSession()    // @MainActor
+    @State private var favorites = Favorites()
 
     var body: some Scene {
         WindowGroup {
@@ -18,6 +19,7 @@ struct Platzi_iOS_ProjectApp: App {
                 .environment(PlatziStore(httpClient: HTTPClient()))
                 .environment(cartStore)
                 .environment(MockPlatziStore())
+                .environment(favorites)
         }
     }
 }
