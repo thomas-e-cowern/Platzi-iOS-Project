@@ -12,7 +12,7 @@ struct CartView: View {
     @State private var showCheckoutView: Bool = false
     @State private var showCartInfoView: Bool = false
 
-    var isCheckoutDisabled: Bool { cartStore.total == 0 }
+    var isCheckoutDisabled: Bool { cartStore.cartProducts.isEmpty }
 
     var body: some View {
         NavigationStack {
@@ -20,7 +20,9 @@ struct CartView: View {
                 if cartStore.cartProducts.isEmpty {
                     ContentUnavailableView("You have nothing in your cart", systemImage: "shippingbox")
                 } else {
-                    VStack {
+                    VStack(spacing: 0) {
+
+                        // MARK: - Items
                         List {
                             ForEach(cartStore.cartProducts) { item in
                                 VStack(alignment: .leading, spacing: 8) {
@@ -34,7 +36,7 @@ struct CartView: View {
                                         Button { cartStore.decrement(item) } label: {
                                             Image(systemName: "minus.circle.fill").imageScale(.large)
                                         }
-                                        .buttonStyle(.plain) // tap area is icon only
+                                        .buttonStyle(.plain)
 
                                         Text("\(item.quantityOrdered)")
                                             .monospacedDigit()
@@ -51,7 +53,7 @@ struct CartView: View {
                                             .font(.caption).foregroundStyle(.secondary)
                                     }
                                 }
-                                .contentShape(Rectangle()) // define row hit area (not the delete)
+                                .contentShape(Rectangle())
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button(role: .destructive) {
                                         cartStore.removeProduct(item)
@@ -60,19 +62,31 @@ struct CartView: View {
                                     }
                                 }
                             }
-                        }  // MARK: - End of list
+                        } // end List
 
-                        Text("Total: \(cartStore.total, format: .currency(code: "USD"))")
-                            .font(.title2.weight(.semibold))
-                            .padding(.top, 8)
+                        // MARK: - Totals & Discounts
+                        VStack(spacing: 12) {
+                            HStack {
+                                Text("Subtotal")
+                                Spacer()
+                                Text(cartStore.total, format: .currency(code: "USD"))
+                            }
 
-                        Button("Complete Checkout") {
-                            showCartInfoView.toggle()
+                            // 4-char discount code entry (SAVE/DEAL/LUCK/GIFT)
+                            DiscountEntryView()
+
+                            // Summary panel: source (admin vs code), savings, final total + clear code
+                            DiscountSummaryView()
+
+                            Button("Complete Checkout") {
+                                showCartInfoView.toggle()
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(isCheckoutDisabled)
+                            .padding(.top, 4)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(isCheckoutDisabled)
-                        .padding(.vertical)
-
+                        .padding()
+                        .background(.bar) // keeps it visually separated from the list
                     }
                     .navigationTitle("Shopping Cart")
                     .sheet(isPresented: $showCartInfoView) {
@@ -95,19 +109,50 @@ struct CartView: View {
     }
 }
 
-#Preview("Item in Cart") {
+#Preview("Item in Cart + Admin (auto 15%)") {
     let store: CartStore = {
         let s = CartStore()
         s.cartProducts = [
-            Product(id: 1, title: "Test Product", slug: "Test Product", price: 100, description: "This is a test product used in cart development", category: Category(id: 31, name: "Clothes", slug: "clothes", image: "https://i.imgur.com/QkIa5tT.jpeg"), images: [
-                "https://i.imgur.com/1twoaDy.jpeg",
-                "https://i.imgur.com/FDwQgLy.jpeg",
-                "https://i.imgur.com/kg1ZhhH.jpeg"
-            ])
+            Product(
+                id: 1,
+                title: "Test Product",
+                slug: "test-product",
+                price: 100,
+                description: "This is a test product used in cart development",
+                category: Category(id: 31, name: "Clothes", slug: "clothes", image: "https://i.imgur.com/QkIa5tT.jpeg"),
+                images: [
+                    "https://i.imgur.com/1twoaDy.jpeg",
+                    "https://i.imgur.com/FDwQgLy.jpeg",
+                    "https://i.imgur.com/kg1ZhhH.jpeg"
+                ]
+            )
         ]
+        s.userRole = "admin"          // demonstrates automatic 15% employee discount
         return s
     }()
-    
+    NavigationStack {
+        CartView()
+            .environment(store)
+    }
+}
+
+#Preview("Item in Cart + Code (10%)") {
+    let store: CartStore = {
+        let s = CartStore()
+        s.cartProducts = [
+            Product(
+                id: 2,
+                title: "Another Product",
+                slug: "another-product",
+                price: 250,
+                description: "Another item for testing",
+                category: Category(id: 10, name: "Tech", slug: "tech", image: ""),
+                images: []
+            )
+        ]
+        _ = s.applyDiscountCode("DEAL") // 10% via code; will be ignored if admin (15%) is active
+        return s
+    }()
     NavigationStack {
         CartView()
             .environment(store)
