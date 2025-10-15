@@ -14,15 +14,43 @@ class CartStore {
     init() { print("CartStore init") }
     deinit { print("CartStore deinit") }
     
-    
+    // MARK: - Properties
     var cartProducts: [Product] = []
     var favorites: [Product] = []
     
+    // MARK: - Discounts
+    var userRole: String = "customer"          // or "admin"
+    var appliedDiscountCode: String? = nil
+    var activeDiscountPercent: Double = 0.0
+    var discountCleared: Bool = false
+    
+    /// Predefined 4-character discount codes
+    let discountCodes: [String: Double] = [
+        "SAVE": 0.05,  // 5%
+        "DEAL": 0.10,  // 10%
+        "LUCK": 0.15,  // 15%
+        "EMPL": 0.15,  // Employee 15% discount
+        "GIFT": 0.20   // 20%
+    ]
+    
+    // MARK: - Totals
     var total: Int {
         cartProducts.reduce(0) { $0 + ($1.price * $1.quantityOrdered) }
     }
     
-    // Add to cart; if already present, bump quantity
+    /// Final total after applying employee or code-based discount
+    var finalTotal: Double {
+        let baseTotal = Double(total)
+        let discount = activeDiscountPercent
+        
+        // Apply automatic admin discount (15%) if applicable
+        let employeeDiscount = (userRole == "admin") ? 0.15 : 0.0
+        
+        let totalDiscount = max(discount, employeeDiscount)
+        return baseTotal * (1.0 - totalDiscount)
+    }
+    
+    // MARK: - Cart Management
     func add(_ product: Product, quantity: Int = 1) {
         if let idx = cartProducts.firstIndex(where: { $0.id == product.id }) {
             cartProducts[idx].quantityOrdered += quantity
@@ -43,7 +71,6 @@ class CartStore {
         if cartProducts[idx].quantityOrdered > 1 {
             cartProducts[idx].quantityOrdered -= 1
         } else {
-            // at 1 → remove when decrementing
             cartProducts.remove(at: idx)
         }
     }
@@ -51,7 +78,28 @@ class CartStore {
     func removeProduct(_ product: Product) {
         cartProducts.removeAll { $0.id == product.id }
     }
+    
+    // MARK: - Discounts
+    func applyDiscountCode(_ code: String) -> Bool {
+        let normalized = code.uppercased()
+        if let percent = discountCodes[normalized] {
+            appliedDiscountCode = normalized
+            activeDiscountPercent = percent
+            return true
+        } else {
+            appliedDiscountCode = nil
+            activeDiscountPercent = 0.0
+            return false
+        }
+    }
+    
+    func clearDiscount() {
+        appliedDiscountCode = nil
+        activeDiscountPercent = 0.0
+        discountCleared.toggle()
+    }
 }
+
 
 
 //@Observable
