@@ -29,7 +29,7 @@ class PlatziStore {
         let addCategoryRequest = AddCategory(name: name, image: imageUrl)
         let resource = Resource(url: Constants.Urls.addCategory, method: .post(try addCategoryRequest.encode()), modelType: Category.self)
         let newCategory = try await httpClient.load(resource)
-        print("New Category added: \(newCategory)")
+//        print("New Category added: \(newCategory)")
         categories.append(newCategory)
     }
     
@@ -39,7 +39,6 @@ class PlatziStore {
     }
     
     func loadOneProductById(_ productId: Int) async throws -> Product {
-        let getProductRequest = GetProductById(productId: productId)
         let resource = Resource(url: Constants.Urls.getProductById(productId), modelType: Product.self)
         return try await httpClient.load(resource)
     }
@@ -54,7 +53,7 @@ class PlatziStore {
     func deleteProductById(_ productId: Int) async throws -> Bool {
         let resource = Resource(url: Constants.Urls.deleteProductById(productId), method: .delete, modelType: Bool.self)
         let deletedProductSuccess = try await httpClient.load(resource)
-        print("Deleted Product: \(deletedProductSuccess)")
+//        print("Deleted Product: \(deletedProductSuccess)")
         return deletedProductSuccess
     }
     
