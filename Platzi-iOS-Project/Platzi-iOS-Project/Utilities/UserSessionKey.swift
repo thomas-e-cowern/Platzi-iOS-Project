@@ -11,6 +11,6 @@ import SwiftUI
 // 1) The key stores an *optional* to avoid constructing on a nonisolated context.
 // EnvironmentKey stores an *optional* so we don't construct @MainActor types here.
 struct UserSessionKey: EnvironmentKey {
-    nonisolated(unsafe) static let defaultValue: UserSession? = nil
+    static let defaultValue: UserSession? = nil
 }
 
